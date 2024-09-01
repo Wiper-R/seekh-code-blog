@@ -5,6 +5,7 @@ import {
   $isRangeSelection,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
+  ElementFormatType,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
   LexicalEditor,
@@ -52,13 +53,6 @@ enum RichTextAction {
   HIGHLIGHT,
   SUPERSCRIPT,
   SUBSCRIPT,
-  ALIGNLEFT,
-  ALIGNCENTER,
-  ALIGNRIGHT,
-  ALIGNJUSTIFY,
-  ALIGNSTART,
-  ALIGNEND,
-  DIVIDER,
   UNDO,
   REDO,
 }
@@ -126,24 +120,6 @@ function handleRichTextAction(editor: LexicalEditor, action: RichTextAction) {
       break;
     case RichTextAction.SUBSCRIPT:
       editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
-      break;
-    case RichTextAction.ALIGNLEFT:
-      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
-      break;
-    case RichTextAction.ALIGNCENTER:
-      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
-      break;
-    case RichTextAction.ALIGNRIGHT:
-      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
-      break;
-    case RichTextAction.ALIGNJUSTIFY:
-      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
-      break;
-    case RichTextAction.ALIGNSTART:
-      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "start");
-      break;
-    case RichTextAction.ALIGNEND:
-      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "end");
       break;
     case RichTextAction.UNDO:
       editor.dispatchCommand(UNDO_COMMAND, undefined);
@@ -215,46 +191,62 @@ function RichTextOptions({
 
 type ElementFormatDropdownProps = {
   editor: LexicalEditor;
+  elementFormat: string;
+  setElementFormat: (value: string) => void;
 };
 
-function ElementFormatDropdwon({ editor }: ElementFormatDropdownProps) {
-  const options: { icon: LucideIcon; label: string; action: RichTextAction }[] =
-    [
-      {
-        icon: AlignLeftIcon,
-        label: "Left Align",
-        action: RichTextAction.ALIGNLEFT,
-      },
-      {
-        icon: AlignCenterIcon,
-        label: "Center Align",
-        action: RichTextAction.ALIGNCENTER,
-      },
+function ElementFormatDropdwon({
+  editor,
+  elementFormat,
+  setElementFormat,
+}: ElementFormatDropdownProps) {
+  const options: {
+    icon: LucideIcon;
+    label: string;
+    value: ElementFormatType;
+  }[] = [
+    {
+      icon: AlignLeftIcon,
+      label: "Left Align",
+      value: "left",
+    },
+    {
+      icon: AlignCenterIcon,
+      label: "Center Align",
+      value: "center",
+    },
 
-      {
-        icon: AlignRightIcon,
-        label: "Right Align",
-        action: RichTextAction.ALIGNRIGHT,
-      },
-      {
-        icon: AlignJustifyIcon,
-        label: "Justify Align",
-        action: RichTextAction.ALIGNJUSTIFY,
-      },
-      {
-        icon: AlignStartVerticalIcon,
-        label: "Start Align",
-        action: RichTextAction.ALIGNSTART,
-      },
-      {
-        icon: AlignEndVerticalIcon,
-        label: "End Align",
-        action: RichTextAction.ALIGNEND,
-      },
-    ];
+    {
+      icon: AlignRightIcon,
+      label: "Right Align",
+      value: "right",
+    },
+    {
+      icon: AlignJustifyIcon,
+      label: "Justify Align",
+      value: "justify",
+    },
+    {
+      icon: AlignStartVerticalIcon,
+      label: "Start Align",
+      value: "start",
+    },
+    {
+      icon: AlignEndVerticalIcon,
+      label: "End Align",
+      value: "end",
+    },
+  ];
+  function handleElementFormatChange(format: ElementFormatType) {
+    setElementFormat(format);
+    editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, format);
+  }
   return (
     <Select
-      onValueChange={(value) => handleRichTextAction(editor, parseInt(value))}
+      value={elementFormat}
+      onValueChange={(value) =>
+        handleElementFormatChange(value as ElementFormatType)
+      }
     >
       <SelectTrigger className="w-[200px]">
         <SelectValue />
@@ -262,7 +254,7 @@ function ElementFormatDropdwon({ editor }: ElementFormatDropdownProps) {
       <SelectContent>
         {/* Todo: Use a value instead of label */}
         {options.map((option, idx) => (
-          <SelectItem value={option.action.toString()} key={idx}>
+          <SelectItem value={option.value} key={idx}>
             <div className="gap-3 flex items-center">
               <option.icon />
               <span>{option.label}</span>
@@ -286,6 +278,7 @@ function ToolbarPlugin() {
   const [selectionMap, setSelectionMap] = useState<{ [id: number]: boolean }>(
     {},
   );
+  const [elementFormat, setElementFormat] = useState("left");
   const updateToolbar = () => {
     const selection = $getSelection();
     if ($isRangeSelection(selection)) {
@@ -349,7 +342,11 @@ function ToolbarPlugin() {
         disabledMap={disabledMap}
       />
       <Separator orientation="vertical" className="h-[unset] self-stretch" />
-      <ElementFormatDropdwon editor={editor} />
+      <ElementFormatDropdwon
+        editor={editor}
+        elementFormat={elementFormat}
+        setElementFormat={setElementFormat}
+      />
     </div>
   );
 }
