@@ -1,4 +1,4 @@
-import { Button } from "@/components/Button";
+import { Button } from "@/components/ui/button";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
   $getSelection,
@@ -33,6 +33,14 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { randomUUID } from "crypto";
 
 type ToolbarButtonProps = {
   icon: LucideIcon;
@@ -62,13 +70,52 @@ enum RichTextAction {
   REDO,
 }
 
+const blockTypeMapping = {
+  p: "Default Paragraph",
+  h1: "Heading 1",
+  h2: "Heading 2",
+  h3: "Heading 3",
+  h4: "Heading 4",
+  h5: "Heading 5",
+  h6: "Heading 6",
+  code: "Code",
+  quote: "Quote",
+};
+
+type BlockFormattingOptionsProps = {
+  blocktype: "p";
+};
+
+function BlockFormattingOptions() {
+  return (
+    <Select value="p">
+      <SelectTrigger className="w-[200px]">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="p">Default Paragraph</SelectItem>
+        <SelectItem value="h1">Heading 1</SelectItem>
+        <SelectItem value="h2">Heading 2</SelectItem>
+        <SelectItem value="h3">Heading 3</SelectItem>
+        <SelectItem value="h4">Heading 4</SelectItem>
+        <SelectItem value="h5">Heading 5</SelectItem>
+        <SelectItem value="h6">Heading 6</SelectItem>
+      </SelectContent>
+    </Select>
+  );
+}
+
 function ToolbarButton(props: ToolbarButtonProps) {
   return (
     <Button
       onClick={() => props.onAction(props.action)}
-      className={cn({ "bg-blue-500 text-white": props.selected })}
+      className={cn({
+        "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground":
+          props.selected,
+      })}
       disabled={props.disabled}
       size="icon"
+      variant={"ghost"}
     >
       <props.icon strokeWidth={2} width={20} height={20} />
     </Button>
@@ -116,7 +163,7 @@ function ToolbarPlugin() {
     [RichTextAction.REDO]: true,
   });
   const [selectionMap, setSelectionMap] = useState<{ [id: number]: boolean }>(
-    {}
+    {},
   );
   const updateToolbar = () => {
     const selection = $getSelection();
@@ -137,7 +184,7 @@ function ToolbarPlugin() {
   useEffect(() => {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) =>
-        editorState.read(() => updateToolbar())
+        editorState.read(() => updateToolbar()),
       ),
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
@@ -145,7 +192,7 @@ function ToolbarPlugin() {
           updateToolbar();
           return false;
         },
-        LOW_PRIORITY
+        LOW_PRIORITY,
       ),
       editor.registerCommand(
         CAN_UNDO_COMMAND,
@@ -156,7 +203,7 @@ function ToolbarPlugin() {
           }));
           return false;
         },
-        LOW_PRIORITY
+        LOW_PRIORITY,
       ),
       editor.registerCommand(
         CAN_REDO_COMMAND,
@@ -167,8 +214,8 @@ function ToolbarPlugin() {
           }));
           return false;
         },
-        LOW_PRIORITY
-      )
+        LOW_PRIORITY,
+      ),
     );
   }, [editor]);
   function onAction(action: RichTextAction) {
@@ -229,17 +276,19 @@ function ToolbarPlugin() {
   return (
     // Button Group
     <div className="flex gap-2 p-2">
-      {ACTIONS.map((props) =>
+      <BlockFormattingOptions />
+      {ACTIONS.map((props, idx) =>
         props ? (
           <ToolbarButton
             {...props}
             onAction={onAction}
             disabled={disableMap[props.action]}
             selected={selectionMap[props.action]}
+            key={props.action}
           />
         ) : (
-          <Divider />
-        )
+          <Divider key={`divider-${idx}`} />
+        ),
       )}
     </div>
   );
