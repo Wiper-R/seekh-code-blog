@@ -7,6 +7,7 @@ import {
   CAN_UNDO_COMMAND,
   FORMAT_ELEMENT_COMMAND,
   FORMAT_TEXT_COMMAND,
+  LexicalEditor,
   REDO_COMMAND,
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
@@ -40,15 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { randomUUID } from "crypto";
-
-type ToolbarButtonProps = {
-  icon: LucideIcon;
-  action: RichTextAction;
-  disabled: boolean;
-  selected: boolean;
-  onAction: (action: RichTextAction) => void;
-};
+import { Separator } from "@/components/ui/separator";
 
 enum RichTextAction {
   BOLD,
@@ -83,10 +76,10 @@ const blockTypeMapping = {
 };
 
 type BlockFormattingOptionsProps = {
-  blocktype: "p";
+  blocktype: keyof typeof blockTypeMapping;
 };
 
-function BlockFormattingOptions() {
+function BlockFormattingOptions(props: BlockFormattingOptionsProps) {
   return (
     <Select value="p">
       <SelectTrigger className="w-[200px]">
@@ -100,65 +93,193 @@ function BlockFormattingOptions() {
         <SelectItem value="h4">Heading 4</SelectItem>
         <SelectItem value="h5">Heading 5</SelectItem>
         <SelectItem value="h6">Heading 6</SelectItem>
+        <SelectItem value="code">Code</SelectItem>
+        <SelectItem value="quote">Quote</SelectItem>
       </SelectContent>
     </Select>
   );
 }
 
-function ToolbarButton(props: ToolbarButtonProps) {
-  return (
-    <Button
-      onClick={() => props.onAction(props.action)}
-      className={cn({
-        "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground":
-          props.selected,
-      })}
-      disabled={props.disabled}
-      size="icon"
-      variant={"ghost"}
-    >
-      <props.icon strokeWidth={2} width={20} height={20} />
-    </Button>
-  );
-}
-// TODO: Make this reusable
-function Divider() {
-  return <div className="self-stretch w-0.5 bg-gray-700/50 mx-2" />;
+function handleRichTextAction(editor: LexicalEditor, action: RichTextAction) {
+  switch (action) {
+    case RichTextAction.BOLD:
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
+      break;
+
+    case RichTextAction.ITALIC:
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
+      break;
+    case RichTextAction.UNDERLINE:
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
+      break;
+    case RichTextAction.STRIKETHROUGH:
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
+      break;
+    case RichTextAction.CODE:
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
+      break;
+    case RichTextAction.HIGHLIGHT:
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, "highlight");
+      break;
+    case RichTextAction.SUPERSCRIPT:
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript");
+      break;
+    case RichTextAction.SUBSCRIPT:
+      editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
+      break;
+    case RichTextAction.ALIGNLEFT:
+      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
+      break;
+    case RichTextAction.ALIGNCENTER:
+      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
+      break;
+    case RichTextAction.ALIGNRIGHT:
+      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
+      break;
+    case RichTextAction.ALIGNJUSTIFY:
+      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
+      break;
+    case RichTextAction.ALIGNSTART:
+      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "start");
+      break;
+    case RichTextAction.ALIGNEND:
+      editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "end");
+      break;
+    case RichTextAction.UNDO:
+      editor.dispatchCommand(UNDO_COMMAND, undefined);
+      break;
+    case RichTextAction.REDO:
+      editor.dispatchCommand(REDO_COMMAND, undefined);
+      break;
+    default:
+      throw new Error("Unhandled action");
+  }
 }
 
-type ActionType = {
-  icon: LucideIcon;
-  action: RichTextAction;
+type RichTextOptionsProps = {
+  editor: LexicalEditor;
+  selectionMap: { [id: number]: boolean };
+  disabledMap: { [id: number]: boolean };
 };
 
-const ACTIONS: (ActionType | null)[] = [
-  { icon: BoldIcon, action: RichTextAction.BOLD },
-  { icon: ItalicIcon, action: RichTextAction.ITALIC },
-  { icon: UnderlineIcon, action: RichTextAction.UNDERLINE },
-  { icon: StrikethroughIcon, action: RichTextAction.STRIKETHROUGH },
-  null,
-  { icon: CodeIcon, action: RichTextAction.CODE },
-  { icon: HighlighterIcon, action: RichTextAction.HIGHLIGHT },
-  { icon: SuperscriptIcon, action: RichTextAction.SUPERSCRIPT },
-  { icon: SubscriptIcon, action: RichTextAction.SUBSCRIPT },
-  null,
-  { icon: AlignLeftIcon, action: RichTextAction.ALIGNLEFT },
-  { icon: AlignCenterIcon, action: RichTextAction.ALIGNCENTER },
-  { icon: AlignRightIcon, action: RichTextAction.ALIGNRIGHT },
-  { icon: AlignJustifyIcon, action: RichTextAction.ALIGNJUSTIFY },
-  { icon: AlignStartVerticalIcon, action: RichTextAction.ALIGNSTART },
-  { icon: AlignEndVerticalIcon, action: RichTextAction.ALIGNEND },
-  null,
-  { icon: UndoIcon, action: RichTextAction.UNDO },
-  { icon: RedoIcon, action: RichTextAction.REDO },
-];
+function RichTextOptions({
+  editor,
+  selectionMap,
+  disabledMap,
+}: RichTextOptionsProps) {
+  // Undefined is used for dividers
+  const actions: ({ icon: LucideIcon; action: RichTextAction } | undefined)[] =
+    [
+      { icon: BoldIcon, action: RichTextAction.BOLD },
+      { icon: ItalicIcon, action: RichTextAction.ITALIC },
+      { icon: UnderlineIcon, action: RichTextAction.UNDERLINE },
+      { icon: StrikethroughIcon, action: RichTextAction.STRIKETHROUGH },
+      undefined,
+      { icon: HighlighterIcon, action: RichTextAction.HIGHLIGHT },
+      { icon: CodeIcon, action: RichTextAction.CODE },
+      { icon: SuperscriptIcon, action: RichTextAction.SUBSCRIPT },
+      { icon: SubscriptIcon, action: RichTextAction.SUBSCRIPT },
+      undefined,
+      { icon: UndoIcon, action: RichTextAction.UNDO },
+      { icon: RedoIcon, action: RichTextAction.REDO },
+    ];
+
+  return (
+    <>
+      {actions.map((action, idx) =>
+        !action ? (
+          <Separator
+            key={idx}
+            orientation="vertical"
+            className="self-stretch h-[unset]"
+          />
+        ) : (
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            onClick={() => handleRichTextAction(editor, action.action)}
+            key={action.action}
+            className={cn({
+              "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground":
+                selectionMap[action.action],
+            })}
+            disabled={disabledMap[action.action]}
+          >
+            <action.icon width={20} height={20} />
+          </Button>
+        ),
+      )}
+    </>
+  );
+}
+
+type ElementFormatDropdownProps = {
+  editor: LexicalEditor;
+};
+
+function ElementFormatDropdwon({ editor }: ElementFormatDropdownProps) {
+  const options: { icon: LucideIcon; label: string; action: RichTextAction }[] =
+    [
+      {
+        icon: AlignLeftIcon,
+        label: "Left Align",
+        action: RichTextAction.ALIGNLEFT,
+      },
+      {
+        icon: AlignCenterIcon,
+        label: "Center Align",
+        action: RichTextAction.ALIGNCENTER,
+      },
+
+      {
+        icon: AlignRightIcon,
+        label: "Right Align",
+        action: RichTextAction.ALIGNRIGHT,
+      },
+      {
+        icon: AlignJustifyIcon,
+        label: "Justify Align",
+        action: RichTextAction.ALIGNJUSTIFY,
+      },
+      {
+        icon: AlignStartVerticalIcon,
+        label: "Start Align",
+        action: RichTextAction.ALIGNSTART,
+      },
+      {
+        icon: AlignEndVerticalIcon,
+        label: "End Align",
+        action: RichTextAction.ALIGNEND,
+      },
+    ];
+  return (
+    <Select
+      onValueChange={(value) => handleRichTextAction(editor, parseInt(value))}
+    >
+      <SelectTrigger className="w-[200px]">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {/* Todo: Use a value instead of label */}
+        {options.map((option, idx) => (
+          <SelectItem value={option.action.toString()} key={idx}>
+            <div className="gap-3 flex items-center">
+              <option.icon />
+              <span>{option.label}</span>
+            </div>
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
 
 // Priorities
 const LOW_PRIORITY = 1;
 
 function ToolbarPlugin() {
   const [editor] = useLexicalComposerContext();
-  const [disableMap, setDisableMap] = useState<{ [id: number]: boolean }>({
+  const [disabledMap, setDisableMap] = useState<{ [id: number]: boolean }>({
     [RichTextAction.UNDO]: true,
     [RichTextAction.REDO]: true,
   });
@@ -218,78 +339,17 @@ function ToolbarPlugin() {
       ),
     );
   }, [editor]);
-  function onAction(action: RichTextAction) {
-    switch (action) {
-      case RichTextAction.BOLD:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
-        break;
-
-      case RichTextAction.ITALIC:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
-        break;
-      case RichTextAction.UNDERLINE:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
-        break;
-      case RichTextAction.STRIKETHROUGH:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
-        break;
-      case RichTextAction.CODE:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
-        break;
-      case RichTextAction.HIGHLIGHT:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "highlight");
-        break;
-      case RichTextAction.SUPERSCRIPT:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "superscript");
-        break;
-      case RichTextAction.SUBSCRIPT:
-        editor.dispatchCommand(FORMAT_TEXT_COMMAND, "subscript");
-        break;
-      case RichTextAction.ALIGNLEFT:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
-        break;
-      case RichTextAction.ALIGNCENTER:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
-        break;
-      case RichTextAction.ALIGNRIGHT:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
-        break;
-      case RichTextAction.ALIGNJUSTIFY:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
-        break;
-      case RichTextAction.ALIGNSTART:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "start");
-        break;
-      case RichTextAction.ALIGNEND:
-        editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "end");
-        break;
-      case RichTextAction.UNDO:
-        editor.dispatchCommand(UNDO_COMMAND, undefined);
-        break;
-      case RichTextAction.REDO:
-        editor.dispatchCommand(REDO_COMMAND, undefined);
-        break;
-      default:
-        throw new Error("Unhandled action");
-    }
-  }
   return (
     // Button Group
     <div className="flex gap-2 p-2">
-      <BlockFormattingOptions />
-      {ACTIONS.map((props, idx) =>
-        props ? (
-          <ToolbarButton
-            {...props}
-            onAction={onAction}
-            disabled={disableMap[props.action]}
-            selected={selectionMap[props.action]}
-            key={props.action}
-          />
-        ) : (
-          <Divider key={`divider-${idx}`} />
-        ),
-      )}
+      <BlockFormattingOptions blocktype="p" />
+      <RichTextOptions
+        editor={editor}
+        selectionMap={selectionMap}
+        disabledMap={disabledMap}
+      />
+      <Separator orientation="vertical" className="h-[unset] self-stretch" />
+      <ElementFormatDropdwon editor={editor} />
     </div>
   );
 }
