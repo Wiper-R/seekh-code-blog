@@ -1,11 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
-import { $createHeadingNode, HeadingTagType } from "@lexical/rich-text";
+import { $isLinkNode } from "@lexical/link";
 import {
+  $createHeadingNode,
+  $isHeadingNode,
+  HeadingTagType,
+} from "@lexical/rich-text";
+import {
+  $createParagraphNode,
   $getSelection,
   $isElementNode,
   $isRangeSelection,
+  $isRootOrShadowRoot,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
   ElementFormatType,
@@ -48,6 +54,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { getSelectedNode } from "../utils/getSelectedNode";
 import { $setBlocksType } from "@lexical/selection";
+import { $createCodeNode } from "@lexical/code";
 
 enum RichTextAction {
   BOLD,
@@ -61,17 +68,15 @@ enum RichTextAction {
   UNDO,
   REDO,
 }
-
 const blockTypeToBlockName = {
-  p: "Default Paragraph",
+  paragraph: "Normal",
   h1: "Heading 1",
   h2: "Heading 2",
   h3: "Heading 3",
   h4: "Heading 4",
   h5: "Heading 5",
   h6: "Heading 6",
-  code: "Code",
-  quote: "Quote",
+  code: "Code Block",
 };
 
 type BlockFormatDropdownProps = {
@@ -88,12 +93,44 @@ function BlockFormatDropdown({ blockType, editor }: BlockFormatDropdownProps) {
       });
     }
   };
+  const formatParagraph = () => {
+    editor.update(() => {
+      const selection = $getSelection();
+      if ($isRangeSelection(selection)) {
+        $setBlocksType(selection, () => $createParagraphNode());
+      }
+    });
+  };
+  const formatCode = () => {
+    if (blockType !== "code") {
+      editor.update(() => {
+        let selection = $getSelection();
+        if (selection !== null) {
+          if (selection.isCollapsed()) {
+            $setBlocksType(selection, () => $createCodeNode());
+          } else {
+            const textContent = selection.getTextContent();
+            const codeNode = $createCodeNode();
+            selection.insertNodes([codeNode]);
+            selection = $getSelection();
+            if ($isRangeSelection(selection)) {
+              selection.insertRawText(textContent);
+            }
+          }
+        }
+      });
+    }
+  };
   return (
     <Select
-      value="p"
-      onValueChange={(value) => {
+      value={blockType}
+      onValueChange={(value: keyof typeof blockTypeToBlockName) => {
         if (["h1", "h2", "h3", "h4", "h5", "h6"].includes(value)) {
           formatHeading(value as HeadingTagType);
+        } else if (value === "paragraph") {
+          formatParagraph();
+        } else if (value == "code") {
+          formatCode();
         }
       }}
     >
@@ -101,15 +138,11 @@ function BlockFormatDropdown({ blockType, editor }: BlockFormatDropdownProps) {
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="p">Default Paragraph</SelectItem>
-        <SelectItem value="h1">Heading 1</SelectItem>
-        <SelectItem value="h2">Heading 2</SelectItem>
-        <SelectItem value="h3">Heading 3</SelectItem>
-        <SelectItem value="h4">Heading 4</SelectItem>
-        <SelectItem value="h5">Heading 5</SelectItem>
-        <SelectItem value="h6">Heading 6</SelectItem>
-        <SelectItem value="code">Code</SelectItem>
-        <SelectItem value="quote">Quote</SelectItem>
+        {Object.entries(blockTypeToBlockName).map(([value, label], idx) => (
+          <SelectItem value={value} key={value}>
+            {label}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
@@ -298,6 +331,8 @@ function ToolbarPlugin() {
   const [selectionMap, setSelectionMap] = useState<{ [id: number]: boolean }>(
     {}
   );
+  const [blockType, setBlockType] =
+    useState<keyof typeof blockTypeToBlockName>("paragraph");
   const [elementFormat, setElementFormat] = useState("left");
   const updateToolbar = () => {
     const selection = $getSelection();
@@ -330,6 +365,33 @@ function ToolbarPlugin() {
           ? node.getFormatType()
           : parent?.getFormatType()) || "left"
       );
+      const anchorNode = selection.anchor.getNode();
+      let element =
+        anchorNode.getKey() === "root"
+          ? anchorNode
+          : $findMatchingParent(anchorNode, (e) => {
+              const parent = e.getParent();
+              return parent !== null && $isRootOrShadowRoot(parent);
+            });
+
+      if (element === null) {
+        element = anchorNode.getTopLevelElementOrThrow();
+      }
+
+      const elementKey = element.getKey();
+      const elementDOM = editor.getElementByKey(elementKey);
+      if (elementDOM !== null) {
+        if (element.getType() == "paragraph") {
+          setBlockType("paragraph");
+        } else {
+          const type = $isHeadingNode(element)
+            ? element.getTag()
+            : element.getType();
+          if (type in blockTypeToBlockName) {
+            setBlockType(type as keyof typeof blockTypeToBlockName);
+          }
+        }
+      }
     }
   };
   useEffect(() => {
@@ -369,13 +431,10 @@ function ToolbarPlugin() {
       )
     );
   }, [editor]);
-  useEffect(() => {
-    if (elementFormat === "") setElementFormat("left");
-  }, [elementFormat]);
   return (
     // Button Group
-    <div className="flex gap-2 p-2">
-      <BlockFormatDropdown blockType="p" editor={editor} />
+    <div className="flex gap-2">
+      <BlockFormatDropdown blockType={blockType} editor={editor} />
       <RichTextOptions
         editor={editor}
         selectionMap={selectionMap}

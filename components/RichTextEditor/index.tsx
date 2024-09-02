@@ -9,8 +9,12 @@ import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ToolbarPlugin } from "./plugins/ToolbarPlugin";
-import { EditorThemeClasses } from "lexical";
+import { EditorThemeClasses, ElementNode } from "lexical";
 import { HeadingNode } from "@lexical/rich-text";
+import { CodeNode, CodeHighlightNode } from "@lexical/code";
+import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
+import { cn } from "@/lib/utils";
+import "./editor.scss";
 
 const theme: EditorThemeClasses = {
   text: {
@@ -21,28 +25,42 @@ const theme: EditorThemeClasses = {
     underline: "underline",
     strikethrough: "line-through",
   },
-  heading: { h1: "text-3xl font-bold" },
+  heading: {
+    h1: "text-4xl font-extrabold",
+    h2: "text-3xl font-bold",
+    h3: "text-2xl font-semibold",
+    h4: "text-xl font-medium",
+    h5: "text-lg font-medium",
+    h6: "text-base font-medium",
+  },
+  paragraph: "text-base",
+  code: "font-mono bg-gray-300 p-5 ml-12 rounded-md block editor-code",
+  codeHighlight: {
+    keyword: "text-red-800",
+  },
 };
 
 function onError(e: any) {
   console.log(e);
 }
 
-function RichTextEditor() {
+function RichTextEditor({ className }: { className: string }) {
   const initialConfig: InitialConfigType = {
-    namespace: "MyEditor",
+    namespace: "Blog Editor",
     theme,
     onError,
-    nodes: [HeadingNode],
+    nodes: [HeadingNode, CodeNode, CodeHighlightNode],
   };
 
   return (
     <LexicalComposer initialConfig={initialConfig}>
-      <ToolbarPlugin />
-      <div className="relative m-2">
+      <div className="mb-3 mt-4">
+        <ToolbarPlugin />
+      </div>
+      <div className={cn("relative flex flex-col min-h-[600px]", className)}>
         <RichTextPlugin
           contentEditable={
-            <ContentEditable className="h-[600px] overflow-auto outline-none border-black border rounded text-lg p-2" />
+            <ContentEditable className="flex-grow overflow-auto outline-none border-black border rounded text-lg p-2" />
           }
           placeholder={
             <div className="absolute top-2 left-2 text-lg text-gray-400 select-none">
@@ -51,6 +69,7 @@ function RichTextEditor() {
           }
           ErrorBoundary={LexicalErrorBoundary}
         />
+        <CodeHighlightPlugin />
       </div>
       <HistoryPlugin />
       <AutoFocusPlugin />

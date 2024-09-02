@@ -1,6 +1,5 @@
-import { RichTextEditor } from "@/components/RichTextEditor";
-import Image from "next/image";
+import { BlogEditor } from "@/components/BlogEditor";
 
 export default function Home() {
-  return <RichTextEditor />;
+  return <BlogEditor />;
 }
