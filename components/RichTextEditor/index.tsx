@@ -1,5 +1,8 @@
 "use client";
-import { LexicalComposer } from "@lexical/react/LexicalComposer";
+import {
+  InitialConfigType,
+  LexicalComposer,
+} from "@lexical/react/LexicalComposer";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
@@ -7,6 +10,7 @@ import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ToolbarPlugin } from "./plugins/ToolbarPlugin";
 import { EditorThemeClasses } from "lexical";
+import { HeadingNode } from "@lexical/rich-text";
 
 const theme: EditorThemeClasses = {
   text: {
@@ -17,6 +21,7 @@ const theme: EditorThemeClasses = {
     underline: "underline",
     strikethrough: "line-through",
   },
+  heading: { h1: "text-3xl font-bold" },
 };
 
 function onError(e: any) {
@@ -24,10 +29,11 @@ function onError(e: any) {
 }
 
 function RichTextEditor() {
-  const initialConfig = {
+  const initialConfig: InitialConfigType = {
     namespace: "MyEditor",
     theme,
     onError,
+    nodes: [HeadingNode],
   };
 
   return (
@@ -36,7 +42,7 @@ function RichTextEditor() {
       <div className="relative m-2">
         <RichTextPlugin
           contentEditable={
-            <ContentEditable className="h-32 overflow-auto outline-none border-black border rounded text-lg p-2" />
+            <ContentEditable className="h-[600px] overflow-auto outline-none border-black border rounded text-lg p-2" />
           }
           placeholder={
             <div className="absolute top-2 left-2 text-lg text-gray-400 select-none">

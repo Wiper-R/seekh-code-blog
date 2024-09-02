@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
+import { $createHeadingNode, HeadingTagType } from "@lexical/rich-text";
 import {
   $getSelection,
+  $isElementNode,
   $isRangeSelection,
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
@@ -13,7 +16,7 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from "lexical";
-import { mergeRegister } from "@lexical/utils";
+import { $findMatchingParent, mergeRegister } from "@lexical/utils";
 import {
   AlignCenterIcon,
   AlignEndVerticalIcon,
@@ -43,6 +46,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { getSelectedNode } from "../utils/getSelectedNode";
+import { $setBlocksType } from "@lexical/selection";
 
 enum RichTextAction {
   BOLD,
@@ -57,7 +62,7 @@ enum RichTextAction {
   REDO,
 }
 
-const blockTypeMapping = {
+const blockTypeToBlockName = {
   p: "Default Paragraph",
   h1: "Heading 1",
   h2: "Heading 2",
@@ -69,13 +74,29 @@ const blockTypeMapping = {
   quote: "Quote",
 };
 
-type BlockFormattingOptionsProps = {
-  blocktype: keyof typeof blockTypeMapping;
+type BlockFormatDropdownProps = {
+  blockType: keyof typeof blockTypeToBlockName;
+  editor: LexicalEditor;
 };
 
-function BlockFormattingOptions(props: BlockFormattingOptionsProps) {
+function BlockFormatDropdown({ blockType, editor }: BlockFormatDropdownProps) {
+  const formatHeading = (headingSize: HeadingTagType) => {
+    if (blockType !== headingSize) {
+      editor.update(() => {
+        const selection = $getSelection();
+        $setBlocksType(selection, () => $createHeadingNode(headingSize));
+      });
+    }
+  };
   return (
-    <Select value="p">
+    <Select
+      value="p"
+      onValueChange={(value) => {
+        if (["h1", "h2", "h3", "h4", "h5", "h6"].includes(value)) {
+          formatHeading(value as HeadingTagType);
+        }
+      }}
+    >
       <SelectTrigger className="w-[200px]">
         <SelectValue />
       </SelectTrigger>
@@ -165,7 +186,7 @@ function RichTextOptions({
       {actions.map((action, idx) =>
         !action ? (
           <Separator
-            key={idx}
+            key={`${idx}-separator`}
             orientation="vertical"
             className="self-stretch h-[unset]"
           />
@@ -174,7 +195,7 @@ function RichTextOptions({
             variant={"ghost"}
             size={"icon"}
             onClick={() => handleRichTextAction(editor, action.action)}
-            key={action.action}
+            key={idx}
             className={cn({
               "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground":
                 selectionMap[action.action],
@@ -183,7 +204,7 @@ function RichTextOptions({
           >
             <action.icon width={20} height={20} />
           </Button>
-        ),
+        )
       )}
     </>
   );
@@ -252,7 +273,6 @@ function ElementFormatDropdwon({
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
-        {/* Todo: Use a value instead of label */}
         {options.map((option, idx) => (
           <SelectItem value={option.value} key={idx}>
             <div className="gap-3 flex items-center">
@@ -276,7 +296,7 @@ function ToolbarPlugin() {
     [RichTextAction.REDO]: true,
   });
   const [selectionMap, setSelectionMap] = useState<{ [id: number]: boolean }>(
-    {},
+    {}
   );
   const [elementFormat, setElementFormat] = useState("left");
   const updateToolbar = () => {
@@ -293,12 +313,29 @@ function ToolbarPlugin() {
         [RichTextAction.SUPERSCRIPT]: selection.hasFormat("superscript"),
       };
       setSelectionMap(newSelectionMap);
+      const node = getSelectedNode(selection);
+      const parent = node.getParent();
+      let matchingParent;
+      if ($isLinkNode(parent)) {
+        // If node is a link, we need to fetch the parent paragraph node to set format
+        matchingParent = $findMatchingParent(
+          node,
+          (parentNode) => $isElementNode(parentNode) && !parentNode.isInline()
+        );
+      }
+      setElementFormat(
+        ($isElementNode(matchingParent)
+          ? matchingParent.getFormatType()
+          : $isElementNode(node)
+          ? node.getFormatType()
+          : parent?.getFormatType()) || "left"
+      );
     }
   };
   useEffect(() => {
     return mergeRegister(
       editor.registerUpdateListener(({ editorState }) =>
-        editorState.read(() => updateToolbar()),
+        editorState.read(() => updateToolbar())
       ),
       editor.registerCommand(
         SELECTION_CHANGE_COMMAND,
@@ -306,7 +343,7 @@ function ToolbarPlugin() {
           updateToolbar();
           return false;
         },
-        LOW_PRIORITY,
+        LOW_PRIORITY
       ),
       editor.registerCommand(
         CAN_UNDO_COMMAND,
@@ -317,7 +354,7 @@ function ToolbarPlugin() {
           }));
           return false;
         },
-        LOW_PRIORITY,
+        LOW_PRIORITY
       ),
       editor.registerCommand(
         CAN_REDO_COMMAND,
@@ -328,14 +365,17 @@ function ToolbarPlugin() {
           }));
           return false;
         },
-        LOW_PRIORITY,
-      ),
+        LOW_PRIORITY
+      )
     );
   }, [editor]);
+  useEffect(() => {
+    if (elementFormat === "") setElementFormat("left");
+  }, [elementFormat]);
   return (
     // Button Group
     <div className="flex gap-2 p-2">
-      <BlockFormattingOptions blocktype="p" />
+      <BlockFormatDropdown blockType="p" editor={editor} />
       <RichTextOptions
         editor={editor}
         selectionMap={selectionMap}
