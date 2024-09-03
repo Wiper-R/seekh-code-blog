@@ -25,7 +25,7 @@ export default function DraggableBlockPlugin({
       targetLineRef={targetLineRef}
       menuComponent={
         <div ref={menuRef} className="block left-0 top-0 absolute">
-          <GripVerticalIcon className="text-muted-foreground" />
+          <GripVerticalIcon className="text-gray-300 hover:text-gray-500 cursor-grab" />
         </div>
       }
       targetLineComponent={

@@ -209,7 +209,7 @@ function RichTextOptions({
       undefined,
       { icon: HighlighterIcon, action: RichTextAction.HIGHLIGHT },
       { icon: CodeIcon, action: RichTextAction.CODE },
-      { icon: SuperscriptIcon, action: RichTextAction.SUBSCRIPT },
+      { icon: SuperscriptIcon, action: RichTextAction.SUPERSCRIPT },
       { icon: SubscriptIcon, action: RichTextAction.SUBSCRIPT },
       undefined,
       { icon: UndoIcon, action: RichTextAction.UNDO },
