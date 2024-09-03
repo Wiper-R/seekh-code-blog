@@ -1,5 +1,5 @@
-import { BlogEditor } from "@/components/BlogEditor";
+import { Navbar } from "@/components/Navbar";
 
 export default function Home() {
-  return <BlogEditor />;
+  return <Navbar />;
 }
