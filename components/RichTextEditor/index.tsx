@@ -14,34 +14,35 @@ import { HeadingNode } from "@lexical/rich-text";
 import { CodeNode, CodeHighlightNode } from "@lexical/code";
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import { cn } from "@/lib/utils";
-import "./editor.scss";
 import DraggableBlockPlugin from "./plugins/DragableBlogPlugin";
 import { useRef, useState } from "react";
 
+// TODO: Make underline and strikethough (toggable but not at same time)
 const theme: EditorThemeClasses = {
   text: {
-    bold: "text-bold",
-    italic: "italic",
-    highlight: "bg-yellow-600",
-    code: "bg-gray-200 font-mono border border-gray-400 p-0.5",
-    underline: "underline",
-    strikethrough: "line-through",
+    bold: "article-text-bold",
+    italic: "article-text-italic",
+    highlight: "article-text-highlight",
+    code: "article-text-code",
+    underline: "article-text-underline",
+    strikethrough: "article-text-strikethrough",
   },
   heading: {
-    h1: "text-4xl font-extrabold",
-    h2: "text-3xl font-bold",
-    h3: "text-2xl font-semibold",
-    h4: "text-xl font-medium",
-    h5: "text-lg font-medium",
-    h6: "text-base font-medium",
+    h1: "article-heading-h1",
+    h2: "article-heading-h2",
+    h3: "article-heading-h3",
+    h4: "article-heading-h4",
+    h5: "article-heading-h5",
+    h6: "article-heading-h6",
   },
-  paragraph: "text-base",
-  code: "font-mono bg-gray-300 p-5 rounded-md block editor-code",
+  paragraph: "article-paragraph",
+  code: "article-codeblock",
   codeHighlight: {
-    keyword: "text-red-800",
-    variable: "text-yellow-800",
-    number: "text-blue-800",
-    comment: "text-gray-600",
+    keyword: "article-codeHighlight-keyword",
+    variable: "article-codeHighlight-variable",
+    number: "article-codeHighlight-number",
+    comment: "article-codeHighlight-comment",
+    string: "article-codeHighlight-string",
   },
 };
 
