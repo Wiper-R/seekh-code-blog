@@ -15,6 +15,8 @@ import { CodeNode, CodeHighlightNode } from "@lexical/code";
 import CodeHighlightPlugin from "./plugins/CodeHighlightPlugin";
 import { cn } from "@/lib/utils";
 import "./editor.scss";
+import DraggableBlockPlugin from "./plugins/DragableBlogPlugin";
+import { useRef, useState } from "react";
 
 const theme: EditorThemeClasses = {
   text: {
@@ -55,6 +57,15 @@ function RichTextEditor({ className }: { className: string }) {
     nodes: [HeadingNode, CodeNode, CodeHighlightNode],
   };
 
+  const [anchorElem, setAnchorElement] = useState<HTMLDivElement>();
+
+  function onRef(element: HTMLDivElement) {
+    console.log(`On Ref Called ${element}`);
+    if (element !== null) {
+      setAnchorElement(element);
+    }
+  }
+
   return (
     <LexicalComposer initialConfig={initialConfig}>
       <div className="mb-3 mt-4">
@@ -63,15 +74,18 @@ function RichTextEditor({ className }: { className: string }) {
       <div className={cn("relative flex flex-col min-h-[600px]", className)}>
         <RichTextPlugin
           contentEditable={
-            <ContentEditable className="flex-grow overflow-auto outline-none border-border border rounded text-lg p-2 resize-y focus:border-primary" />
+            <div ref={onRef} className="flex-grow flex">
+              <ContentEditable className="flex-grow overflow-auto outline-none border-border border rounded text-lg px-8 py-2 resize-y focus:border-primary" />
+            </div>
           }
           placeholder={
-            <div className="absolute top-2 left-2 text-lg text-gray-400 select-none">
+            <div className="absolute top-2 left-8 text-lg text-gray-400 select-none pointer-events-none">
               Enter some text...
             </div>
           }
           ErrorBoundary={LexicalErrorBoundary}
         />
+        <DraggableBlockPlugin anchorElem={anchorElem} />
         <CodeHighlightPlugin />
       </div>
       <HistoryPlugin />
