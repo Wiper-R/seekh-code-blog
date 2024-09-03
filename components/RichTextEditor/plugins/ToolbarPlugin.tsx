@@ -1,4 +1,6 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import { $generateHtmlFromNodes } from "@lexical/html";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isLinkNode } from "@lexical/link";
 import {
@@ -225,6 +227,7 @@ function RichTextOptions({
           />
         ) : (
           <Button
+            type="button"
             variant={"ghost"}
             size={"icon"}
             onClick={() => handleRichTextAction(editor, action.action)}
@@ -446,6 +449,15 @@ function ToolbarPlugin() {
         elementFormat={elementFormat}
         setElementFormat={setElementFormat}
       />
+      <Button
+        onClick={() => {
+          let editorState = editor.getEditorState();
+          editorState.read(() => alert($generateHtmlFromNodes(editor)));
+        }}
+        type="button"
+      >
+        Export
+      </Button>
     </div>
   );
 }

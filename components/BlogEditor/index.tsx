@@ -8,10 +8,9 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { MaxWidthWrapper } from "../MaxWidthWrapper";
+import { Textarea } from "../ui/textarea";
 
 export function BlogEditor() {
   const form = useForm();
@@ -36,7 +35,7 @@ export function BlogEditor() {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Input />
+                  <Textarea rows={1} />
                 </FormControl>
               </FormItem>
             )}

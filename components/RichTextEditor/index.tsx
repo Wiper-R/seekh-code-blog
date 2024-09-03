@@ -34,9 +34,12 @@ const theme: EditorThemeClasses = {
     h6: "text-base font-medium",
   },
   paragraph: "text-base",
-  code: "font-mono bg-gray-300 p-5 ml-12 rounded-md block editor-code",
+  code: "font-mono bg-gray-300 p-5 rounded-md block editor-code",
   codeHighlight: {
     keyword: "text-red-800",
+    variable: "text-yellow-800",
+    number: "text-blue-800",
+    comment: "text-gray-600",
   },
 };
 
@@ -60,7 +63,7 @@ function RichTextEditor({ className }: { className: string }) {
       <div className={cn("relative flex flex-col min-h-[600px]", className)}>
         <RichTextPlugin
           contentEditable={
-            <ContentEditable className="flex-grow overflow-auto outline-none border-black border rounded text-lg p-2" />
+            <ContentEditable className="flex-grow overflow-auto outline-none border-border border rounded text-lg p-2 resize-y focus:border-primary" />
           }
           placeholder={
             <div className="absolute top-2 left-2 text-lg text-gray-400 select-none">
