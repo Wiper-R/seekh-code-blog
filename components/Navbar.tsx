@@ -36,7 +36,7 @@ export function Navbar({ className, ...props }: NavbarProps) {
       <MaxWidthWrapper className="flex items-center justify-between">
         <div className={cn("flex p-4 gap-8", className)}>
           {links.map((props) => (
-            <NavLink {...props} />
+            <NavLink {...props} key={props.href} />
           ))}
         </div>
         <div className="flex gap-4">
