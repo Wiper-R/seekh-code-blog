@@ -12,7 +12,7 @@ export function apiHandler(handler: HandlerType) {
       return await handler(request, response);
     } catch (e) {
       if (e instanceof ApiError) {
-        return NextResponse.json({ error: e.message }, { status: e.status });
+        return NextResponse.json({ message: e.message }, { status: e.status });
       }
       throw e;
     }
