@@ -10,7 +10,8 @@ import { cookies } from "next/headers";
 import moment from "moment";
 import crypto from "crypto";
 
-export const POST = apiHandler(async (request) => {
+export const POST = apiHandler(async (request, response) => {
+  console.log(response);
   const data = await zodHelper(request, loginSchema);
   const user = await db.user.findFirst({
     where: {

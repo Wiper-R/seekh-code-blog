@@ -1,15 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { ApiError } from "./error";
 
-type HandlerType = (
-  request: NextRequest,
-  response: NextResponse
-) => NextResponse | Promise<NextResponse>;
+type HandlerType = (...params: any[]) => NextResponse | Promise<NextResponse>;
 
 export function apiHandler(handler: HandlerType) {
-  return async (request: NextRequest, response: NextResponse) => {
+  return async (...params: any[]) => {
     try {
-      return await handler(request, response);
+      return await handler(...params);
     } catch (e) {
       if (e instanceof ApiError) {
         return NextResponse.json({ message: e.message }, { status: e.status });
