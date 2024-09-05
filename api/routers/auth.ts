@@ -1,9 +1,9 @@
 import express from "express";
-import db from "../prisma/db";
+import db from "@/prisma/db";
 import createUser from "shared/validators/createUser";
 import loginUser from "shared/validators/loginUser";
 import bcryptjs from "bcryptjs";
-import { safeUser } from "../lib/utils";
+import { safeUser } from "@/lib/utils";
 import crypto from "crypto";
 import moment from "shared/node_modules/moment";
 

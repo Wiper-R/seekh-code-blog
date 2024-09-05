@@ -2,7 +2,9 @@
   "name": "seekh-code-blog",
   "private": true,
   "workspaces": [
-    "packages/*"
+    "web",
+    "shared",
+    "api"
   ],
   "scripts": {
     "start": "pnpm -r run dev",

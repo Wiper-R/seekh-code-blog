@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./*"],
+      "shared/*": ["../shared/*"]
+    }
+  },
+  "include": ["**/*.ts"]
+}
