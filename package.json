@@ -1,0 +1,11 @@
+{
+  "name": "seekh-code-blog",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "start": "pnpm -r run dev",
+    "dev": "pnpm --filter @seekh-code-blog/api start & pnpm --filter @seekh-code-blog/web dev"
+  }
+}
