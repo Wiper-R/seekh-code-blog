@@ -14,18 +14,17 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String    @unique
-  email     String    @unique
-  firstname String
-  lastname  String
-  password  String // Hashed Password
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  Session   Session[]
-  Role      Role?     @relation(fields: [roleId], references: [id])
-  roleId    Int?
-  Post      Post[]
+  id          Int       @id @default(autoincrement())
+  username    String    @unique
+  email       String    @unique
+  displayName String
+  password    String // Hashed Password
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  Session     Session[]
+  Role        Role?     @relation(fields: [roleId], references: [id])
+  roleId      Int?
+  Post        Post[]
 }
 
 model Session {

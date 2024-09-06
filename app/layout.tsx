@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./global.css";
 import "./article.scss";
+import { Navbar } from "@/components/Navbar";
+import { MaxWidthWrapper } from "@/components/MaxWidthWrapper";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,8 +19,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className="h-full" suppressHydrationWarning>
+      <body className={cn(inter.className, "min-h-screen h-full")}>
+        <MaxWidthWrapper className="h-full">
+          <Navbar />
+          {children}
+        </MaxWidthWrapper>
+      </body>
     </html>
   );
 }

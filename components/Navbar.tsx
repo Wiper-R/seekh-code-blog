@@ -40,10 +40,12 @@ export function Navbar({ className, ...props }: NavbarProps) {
           ))}
         </div>
         <div className="flex gap-4">
-          <Button variant="ghost" className="p-4">
+          <Link href="/signup" className="p-4">
             Signup
-          </Button>
-          <Button className="p-4">Login</Button>
+          </Link>
+          <Link href="/login" className="p-4">
+            Login
+          </Link>
         </div>
       </MaxWidthWrapper>
     </header>

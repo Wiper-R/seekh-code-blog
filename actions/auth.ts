@@ -10,15 +10,14 @@ import { cookies } from "next/headers";
 import moment from "moment";
 import crypto from "crypto";
 
-export const signUp = actionWrapper(async (_data: SignUpSchema) => {
-  const data = await SignUpSchema.parseAsync(_data);
+export const signUp = actionWrapper(async (formData: SignUpSchema) => {
+  const data = await SignUpSchema.parseAsync(formData);
   try {
     const hashed_password = await bcrypt.hash(data.password, 10);
     await db.user.create({
       data: {
         email: data.email,
-        firstname: data.firstname,
-        lastname: data.lastname,
+        displayName: data.displayName,
         username: data.username,
         password: hashed_password,
       },
