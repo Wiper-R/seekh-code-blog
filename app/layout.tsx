@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./global.css";
 import "./article.scss";
 import { cn } from "@/lib/utils";
-import { auth } from "../auth";
+import { Navbar } from "@/components/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,11 +17,16 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
   return (
     <html lang="en" className="h-full" suppressHydrationWarning>
-      <body className={cn(inter.className, "min-h-screen h-full")}>
-        {session && session.user?.email}
+      <body
+        className={cn(
+          inter.className,
+          "min-h-screen h-full bg-[#2A2A2A] flex flex-col  bg-gradient-to-b from-[#232323] to-gray-950"
+        )}
+      >
+        <Navbar />
+        <div className="h-full">{children}</div>
       </body>
     </html>
   );
