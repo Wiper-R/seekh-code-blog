@@ -18,15 +18,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full" suppressHydrationWarning>
+    <html lang="en" className="min-h-full dark h-full" suppressHydrationWarning>
       <body
         className={cn(
           inter.className,
-          "min-h-screen h-full bg-[#2A2A2A] flex flex-col  bg-gradient-to-b from-[#232323] to-gray-950"
+          "bg-[#2A2A2A] bg-gradient-to-b bg-fixed from-[#232323] to-gray-950 min-h-full flex flex-col h-full overflow-auto"
         )}
       >
         <Navbar />
-        <div className="h-full">{children}</div>
+        <div className="flex-1 py-14">{children}</div>
       </body>
     </html>
   );
