@@ -1,8 +1,13 @@
 import SeekhCodePng from "@/public/seekh-code.png";
 import { MaxWidthWrapper } from "./MaxWidthWrapper";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { auth, signOut } from "@/auth";
+import { cn } from "@/lib/utils";
+import { Button } from "./ui/button";
 
-export function Navbar() {
+export async function Navbar() {
+  const session = await auth();
   return (
     <header className="bg-[#232323] p-3 shadow z-10">
       <MaxWidthWrapper className="flex justify-between items-center">
@@ -23,12 +28,31 @@ export function Navbar() {
               {label}
             </Link>
           ))}
-          <Link
-            href="/signin"
-            className="text-lg font-semibold bg-green-500 px-3 py-2 rounded text-black"
-          >
-            Sign In
-          </Link>
+          {session?.user ? (
+            <form
+              action={async () => {
+                "use server";
+                await signOut();
+              }}
+            >
+              <button
+                className={cn(
+                  "text-lg font-semibold bg-red-500 px-3 py-2 rounded text-black"
+                )}
+              >
+                Logout
+              </button>
+            </form>
+          ) : (
+            <Link
+              href="/signin"
+              className={cn(
+                "text-lg font-semibold bg-green-500 px-3 py-2 rounded text-black"
+              )}
+            >
+              Sign In
+            </Link>
+          )}
         </div>
       </MaxWidthWrapper>
     </header>
