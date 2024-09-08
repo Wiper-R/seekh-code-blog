@@ -17,7 +17,7 @@ export default async function Page() {
   const session = await auth();
   if (session?.user) redirect("/");
   return (
-    <MaxWidthWrapper className="h-full flex flex-col lg:flex-row items-center gap-16">
+    <MaxWidthWrapper className="h-full flex flex-col lg:flex-row items-center gap-16 py-14">
       <div className="flex-grow">
         <h4 className="text-green-600 text-4xl font-bold my-10">
           By signing in you unlock following perks -

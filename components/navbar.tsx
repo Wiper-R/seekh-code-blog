@@ -5,6 +5,8 @@ import { useSession } from "next-auth/react";
 import { auth, signOut } from "@/auth";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { AvatarImage } from "@radix-ui/react-avatar";
 
 export async function Navbar() {
   const session = await auth();
@@ -16,6 +18,7 @@ export async function Navbar() {
         </Link>
         <div className="flex gap-10 items-center">
           {[
+            ["Blog", "/blog"],
             ["Youtube", "/youtube"],
             ["Showcase", "/showcase"],
             ["Get in touch", "/get-in-touch"],
@@ -29,20 +32,24 @@ export async function Navbar() {
             </Link>
           ))}
           {session?.user ? (
-            <form
-              action={async () => {
-                "use server";
-                await signOut();
-              }}
-            >
-              <button
-                className={cn(
-                  "text-lg font-semibold bg-red-500 px-3 py-2 rounded text-black"
-                )}
-              >
-                Logout
-              </button>
-            </form>
+            // <form
+            //   action={async () => {
+            //     "use server";
+            //     await signOut();
+            //   }}
+            // >
+            //   <button
+            //     className={cn(
+            //       "text-lg font-semibold bg-red-500 px-3 py-2 rounded text-black"
+            //     )}
+            //   >
+            //     Logout
+            //   </button>
+            // </form>
+            <Avatar className="rounded-xl">
+              <AvatarImage src={session.user.image || undefined} />
+              <AvatarFallback>{session.user.name}</AvatarFallback>
+            </Avatar>
           ) : (
             <Link
               href="/signin"

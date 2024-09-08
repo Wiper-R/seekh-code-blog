@@ -19,7 +19,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="min-h-full dark h-full" suppressHydrationWarning>
+    <html
+      lang="en"
+      className="min-h-full dark h-full scroll-smooth"
+      suppressHydrationWarning
+    >
       <body
         className={cn(
           inter.className,
@@ -28,7 +32,7 @@ export default async function RootLayout({
       >
         <SessionProvider>
           <Navbar />
-          <div className="flex-1 py-14">{children}</div>
+          <div className="flex-1">{children}</div>
         </SessionProvider>
       </body>
     </html>
