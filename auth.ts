@@ -33,8 +33,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
     GitHub({
-      async profile(profile) {
+      async profile(profile, token) {
         const username = await createUniqueUsername(profile.login);
+
+        if (!profile.email) {
+          const access_token = token.access_token;
+          const res = await fetch("https://api.github.com/user/emails", {
+            headers: { Authorization: `token ${access_token}` },
+          });
+          const data = await res.json();
+          for (let entry of data) {
+            if (entry.primary) {
+              profile.email = entry["email"];
+              break;
+            }
+          }
+        }
+
         return {
           email: profile.email,
           username,

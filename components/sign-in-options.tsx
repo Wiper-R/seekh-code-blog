@@ -17,7 +17,7 @@ export function SignInOptions() {
           size="lg"
           onClick={() => signIn("google")}
         >
-          <img src={GoogleIcon.src} className="w-5" />
+          <GoogleIcon className="w-6 h-6" />
           <span>Sign in with Google</span>
         </Button>
         <Button
@@ -25,7 +25,7 @@ export function SignInOptions() {
           size="lg"
           onClick={() => signIn("github")}
         >
-          <img src={GithubIcon.src} className="w-5" />
+          <GithubIcon className="w-6 h-6" />
           <span>Sign in with Github</span>
         </Button>
       </CardContent>

@@ -5,6 +5,7 @@ import "./article.scss";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/navbar";
 import { SessionProvider } from "next-auth/react";
+import { Footer } from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,21 +20,15 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className="min-h-full dark h-full scroll-smooth"
-      suppressHydrationWarning
-    >
+    <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={cn(
           inter.className,
-          "bg-[#2A2A2A] bg-gradient-to-b bg-fixed from-[#232323] to-gray-950 min-h-full flex flex-col h-full overflow-auto"
+          "bg-[#2A2A2A] bg-gradient-to-b bg-fixed from-[#232323] to-gray-950 overflow-auto"
         )}
       >
-        <SessionProvider>
-          <Navbar />
-          <div className="flex-1">{children}</div>
-        </SessionProvider>
+        <SessionProvider>{children}</SessionProvider>
+        <Footer />
       </body>
     </html>
   );
