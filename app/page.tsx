@@ -14,6 +14,7 @@ import { Navbar } from "@/components/navbar";
 import Spotlight1 from "@/public/spotlight1.png";
 import Spotlight2 from "@/public/spotlight2.png";
 import { SpotlightCard } from "@/components/SpotlightCard";
+import { Footer } from "@/components/footer";
 
 export default function Home() {
   return (
@@ -58,6 +59,7 @@ export default function Home() {
       <hr />
       <PopularPosts />
       <Testimonials />
+      <Footer />
     </>
   );
 }

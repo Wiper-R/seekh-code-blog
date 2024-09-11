@@ -11,3 +11,13 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 export default prisma;
+// import { PrismaClient } from "@prisma/client";
+// import { PrismaNeon } from "@prisma/adapter-neon";
+// import { Pool } from "@neondatabase/serverless";
+// import "dotenv/config";
+
+// const neon = new Pool({ connectionString: process.env.DATABASE_URL });
+// const adapter = new PrismaNeon(neon);
+// const prisma = new PrismaClient({ adapter });
+
+// export default prisma;

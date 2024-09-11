@@ -76,7 +76,7 @@ function RichTextEditor({ className }: { className: string }) {
         <RichTextPlugin
           contentEditable={
             <div ref={onRef} className="flex-grow flex">
-              <ContentEditable className="flex-grow overflow-auto outline-none border-border border rounded text-lg px-8 py-2 resize-y focus:border-primary" />
+              <ContentEditable className="flex-grow outline-none border-border border rounded text-lg px-8 py-2 resize-y focus:border-primary" />
             </div>
           }
           placeholder={

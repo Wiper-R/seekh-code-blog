@@ -24,11 +24,10 @@ export default async function RootLayout({
       <body
         className={cn(
           inter.className,
-          "bg-[#2A2A2A] bg-gradient-to-b bg-fixed from-[#232323] to-gray-950 overflow-auto"
+          "bg-[#2A2A2A] bg-gradient-to-b bg-fixed from-[#232323] to-gray-950 overflow-auto",
         )}
       >
         <SessionProvider>{children}</SessionProvider>
-        <Footer />
       </body>
     </html>
   );

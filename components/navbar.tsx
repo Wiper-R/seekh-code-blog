@@ -7,9 +7,12 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
+import { getUser } from "@/actions/auth";
+import { UserDropdown } from "./user-dropdown";
 
 export async function Navbar() {
   const session = await auth();
+  const user = await getUser();
   return (
     <header className="bg-[#232323] p-3 shadow z-10">
       <MaxWidthWrapper className="flex justify-between items-center">
@@ -32,24 +35,11 @@ export async function Navbar() {
             </Link>
           ))}
           {session?.user ? (
-            // <form
-            //   action={async () => {
-            //     "use server";
-            //     await signOut();
-            //   }}
-            // >
-            //   <button
-            //     className={cn(
-            //       "text-lg font-semibold bg-red-500 px-3 py-2 rounded text-black"
-            //     )}
-            //   >
-            //     Logout
-            //   </button>
-            // </form>
-            <Avatar className="rounded-xl">
-              <AvatarImage src={session.user.image || undefined} />
-              <AvatarFallback>{session.user.name}</AvatarFallback>
-            </Avatar>
+            // <Avatar className="rounded-xl">
+            //   <AvatarImage src={session.user.image || undefined} />
+            //   <AvatarFallback>{session.user.name}</AvatarFallback>
+            // </Avatar>
+            <UserDropdown user={session.user} />
           ) : (
             <Link
               href="/signin"
