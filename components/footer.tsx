@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export function Footer() {
   return (
-    <>
+    <div className="mt-auto">
       <hr />
       <footer className="p-6">
         <MaxWidthWrapper className="flex items-center justify-between">
@@ -27,6 +27,6 @@ export function Footer() {
           </div>
         </MaxWidthWrapper>
       </footer>
-    </>
+    </div>
   );
 }

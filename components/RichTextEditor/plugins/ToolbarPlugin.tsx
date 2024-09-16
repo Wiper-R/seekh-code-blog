@@ -1,10 +1,10 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { $generateHtmlFromNodes } from "@lexical/html";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $isLinkNode } from "@lexical/link";
 import {
   $createHeadingNode,
+  $createQuoteNode,
   $isHeadingNode,
   HeadingTagType,
 } from "@lexical/rich-text";
@@ -24,7 +24,11 @@ import {
   SELECTION_CHANGE_COMMAND,
   UNDO_COMMAND,
 } from "lexical";
-import { $findMatchingParent, mergeRegister } from "@lexical/utils";
+import {
+  $findMatchingParent,
+  $getNearestNodeOfType,
+  mergeRegister,
+} from "@lexical/utils";
 import {
   AlignCenterIcon,
   AlignEndVerticalIcon,
@@ -56,7 +60,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { getSelectedNode } from "../utils/getSelectedNode";
 import { $setBlocksType } from "@lexical/selection";
-import { $createCodeNode } from "@lexical/code";
+import { $createCodeNode, $isCodeNode } from "@lexical/code";
+import ImageComponent from "../nodes/ImageComponent";
+import { InsertImageDialog } from "./ImagesPlugin";
+import {
+  $isListNode,
+  INSERT_ORDERED_LIST_COMMAND,
+  INSERT_UNORDERED_LIST_COMMAND,
+  ListNode,
+} from "@lexical/list";
 
 enum RichTextAction {
   BOLD,
@@ -79,6 +91,9 @@ const blockTypeToBlockName = {
   h5: "Heading 5",
   h6: "Heading 6",
   code: "Code Block",
+  quote: "Quote",
+  number: "Number List",
+  bullet: "Bullet List",
 };
 
 type BlockFormatDropdownProps = {
@@ -102,6 +117,28 @@ function BlockFormatDropdown({ blockType, editor }: BlockFormatDropdownProps) {
         $setBlocksType(selection, () => $createParagraphNode());
       }
     });
+  };
+  const formatNumberedList = () => {
+    if (blockType !== "number") {
+      editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
+    } else {
+      formatParagraph();
+    }
+  };
+  const formatBulletList = () => {
+    if (blockType !== "bullet") {
+      editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
+    } else {
+      formatParagraph();
+    }
+  };
+  const formatQuote = () => {
+    if (blockType !== "quote") {
+      editor.update(() => {
+        const selection = $getSelection();
+        $setBlocksType(selection, () => $createQuoteNode());
+      });
+    }
   };
   const formatCode = () => {
     if (blockType !== "code") {
@@ -127,12 +164,19 @@ function BlockFormatDropdown({ blockType, editor }: BlockFormatDropdownProps) {
     <Select
       value={blockType}
       onValueChange={(value: keyof typeof blockTypeToBlockName) => {
+        console.log(value);
         if (["h1", "h2", "h3", "h4", "h5", "h6"].includes(value)) {
           formatHeading(value as HeadingTagType);
         } else if (value === "paragraph") {
           formatParagraph();
         } else if (value == "code") {
           formatCode();
+        } else if (value == "number") {
+          formatNumberedList();
+        } else if (value == "bullet") {
+          formatBulletList();
+        } else if (value == "quote") {
+          formatQuote();
         }
       }}
     >
@@ -334,6 +378,7 @@ function ToolbarPlugin() {
   const [selectionMap, setSelectionMap] = useState<{ [id: number]: boolean }>(
     {}
   );
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
   const [blockType, setBlockType] =
     useState<keyof typeof blockTypeToBlockName>("paragraph");
   const [elementFormat, setElementFormat] = useState("left");
@@ -384,8 +429,16 @@ function ToolbarPlugin() {
       const elementKey = element.getKey();
       const elementDOM = editor.getElementByKey(elementKey);
       if (elementDOM !== null) {
-        if (element.getType() == "paragraph") {
-          setBlockType("paragraph");
+        if ($isListNode(element)) {
+          const parentList = $getNearestNodeOfType<ListNode>(
+            anchorNode,
+            ListNode
+          );
+          const type = parentList
+            ? parentList.getListType()
+            : element.getListType();
+          // @ts-ignore
+          setBlockType(type);
         } else {
           const type = $isHeadingNode(element)
             ? element.getTag()
@@ -393,6 +446,14 @@ function ToolbarPlugin() {
           if (type in blockTypeToBlockName) {
             setBlockType(type as keyof typeof blockTypeToBlockName);
           }
+          // if ($isCodeNode(element)) {
+          //   const language =
+          //     element.getLanguage() as keyof typeof CODE_LANGUAGE_MAP;
+          //   setCodeLanguage(
+          //     language ? CODE_LANGUAGE_MAP[language] || language : ""
+          //   );
+          //   return;
+          // }
         }
       }
     }
@@ -436,7 +497,7 @@ function ToolbarPlugin() {
   }, [editor]);
   return (
     // Button Group
-    <div className="flex gap-2">
+    <div className="flex gap-2 sticky top-0 z-10 bg-stone-900">
       <BlockFormatDropdown blockType={blockType} editor={editor} />
       <RichTextOptions
         editor={editor}
@@ -449,15 +510,13 @@ function ToolbarPlugin() {
         elementFormat={elementFormat}
         setElementFormat={setElementFormat}
       />
-      <Button
-        onClick={() => {
-          let editorState = editor.getEditorState();
-          editorState.read(() => alert($generateHtmlFromNodes(editor)));
-        }}
-        type="button"
-      >
-        Export
-      </Button>
+      <Button onClick={() => setImageDialogOpen(true)}>Image</Button>
+      {imageDialogOpen && (
+        <InsertImageDialog
+          activeEditor={editor}
+          onClose={() => setImageDialogOpen(false)}
+        />
+      )}
     </div>
   );
 }

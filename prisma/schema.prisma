@@ -21,6 +21,7 @@ model User {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   Authenticator Authenticator[]
+  Post          Post[]
 }
 
 model Account {
@@ -78,12 +79,21 @@ model Authenticator {
   @@id([userId, credentialID])
 }
 
-// model Post {
-//   id          Int    @id @default(autoincrement())
-//   slug        String @unique
-//   title       String
-//   description String
-//   content     String
-//   authorId    Int
-//   author      User   @relation(fields: [authorId], references: [id])
-// }
+model Post {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  content     String
+  coverImage  String?
+  authorId    String
+  status      String
+  createdAt   DateTime @default(now())
+  publishedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  author      User     @relation(fields: [authorId], references: [id])
+}
+
+model Tag {
+  name String @id
+}

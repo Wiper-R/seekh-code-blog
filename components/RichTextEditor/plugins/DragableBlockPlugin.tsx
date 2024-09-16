@@ -11,12 +11,13 @@ function isOnMenu(element: HTMLElement): boolean {
 }
 
 export default function DraggableBlockPlugin({
-  anchorElem = document.body,
+  anchorElem,
 }: {
   anchorElem?: HTMLElement;
 }): JSX.Element {
   const menuRef = useRef<HTMLDivElement>(null);
   const targetLineRef = useRef<HTMLDivElement>(null);
+  anchorElem = anchorElem || document.body;
 
   return (
     <DraggableBlockPlugin_EXPERIMENTAL

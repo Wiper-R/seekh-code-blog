@@ -21,7 +21,7 @@ export async function Navbar() {
         </Link>
         <div className="flex gap-10 items-center">
           {[
-            ["Blog", "/blog"],
+            ["Posts", "/posts"],
             ["Youtube", "https://youtube.com/@seekhcode"],
             ["Projects", "/projects"],
             ["Get in touch", "/get-in-touch"],

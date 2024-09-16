@@ -3,9 +3,7 @@ import { Inter } from "next/font/google";
 import "./global.css";
 import "./article.scss";
 import { cn } from "@/lib/utils";
-import { Navbar } from "@/components/navbar";
 import { SessionProvider } from "next-auth/react";
-import { Footer } from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,7 +22,7 @@ export default async function RootLayout({
       <body
         className={cn(
           inter.className,
-          "bg-[#2A2A2A] bg-gradient-to-b bg-fixed from-[#232323] to-gray-950 overflow-auto",
+          "bg-[#2A2A2A] bg-gradient-to-b bg-fixed from-[#232323] to-gray-950 overflow-auto"
         )}
       >
         <SessionProvider>{children}</SessionProvider>

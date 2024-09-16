@@ -10,3 +10,13 @@ export class ApiError extends Error {
     this.status = status;
   }
 }
+
+export const UnAuthenticated = new ApiError({
+  message: "You are not authenticated",
+  status: 401,
+});
+
+export const Forbidden = new ApiError({
+  message: "You are not allowed to perform this action",
+  status: 403,
+});
