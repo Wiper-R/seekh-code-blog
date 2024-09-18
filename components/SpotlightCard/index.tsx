@@ -1,7 +1,10 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { PropsWithChildren, useEffect, useRef, useState } from "react";
 
-export function SpotlightCard({ children }: PropsWithChildren) {
+type SpotlightCardProps = { className?: string } & PropsWithChildren;
+
+export function SpotlightCard({ children, className }: SpotlightCardProps) {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -25,7 +28,10 @@ export function SpotlightCard({ children }: PropsWithChildren) {
   return (
     <div
       ref={divRef}
-      className="p-px bg-border rounded-xl relative isolate overflow-hidden group"
+      className={cn(
+        "p-px bg-border rounded-xl relative isolate overflow-hidden group",
+        className
+      )}
     >
       <div
         className="absolute -z-10 w-[100%] aspect-square opacity-0 group-hover:opacity-100 transition-opacity duration-1000 bg-gradient-radial from-white/60 to-transparent -translate-x-1/2 -translate-y-1/2 rounded-full"

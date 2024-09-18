@@ -13,23 +13,17 @@ export default async function Page() {
     <MaxWidthWrapper className="my-10">
       {posts.map((post, idx) => (
         <>
-          <div
-            key={post.id}
-            className="grid relative"
-            // role="link"
-            // data-href="https://mozilla.org/"
-            // tabIndex={0}
-          >
+          <div key={post.id} className="grid relative">
             <Link href={`/posts/${post.slug}`} className="absolute inset-0" />
             <div className="flex items-center gap-2">
-              <Avatar>
+              <Avatar className="h-7 w-7">
                 <AvatarImage src={post.author.image || undefined} />
                 <AvatarFallback>{post.author.name}</AvatarFallback>
               </Avatar>
               <span className="pointer-events-none z-10">
                 <Link
                   href={`/users/${post.author.username}`}
-                  className="pointer-events-auto hover:underline"
+                  className="pointer-events-auto hover:underline text-gray-300"
                 >
                   <span>{post.author.name}</span>
                 </Link>

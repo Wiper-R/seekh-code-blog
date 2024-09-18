@@ -21,7 +21,7 @@ export default function Home() {
     <>
       <div className="min-h-screen flex flex-col">
         <Navbar />
-        <MaxWidthWrapper className="relative flex items-center justify-center flex-col h-full flex-grow w-full">
+        <MaxWidthWrapper className="relative flex items-center justify-center flex-col h-full flex-grow w-full py-10">
           <ParticlesBackground />
           <div className="max-w-5xl text-center space-y-10">
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-tight uppercase text-gray-100">
@@ -72,8 +72,8 @@ type PostCardProps = {
 
 function PopularPostCard({ title, description, imageUrl }: PostCardProps) {
   return (
-    <SpotlightCard>
-      <Link href="" className="h-full group">
+    <SpotlightCard className="max-w-[400px]">
+      <Link href="" className="h-full group max-w-[400px]">
         <Card className="bg-gradient-to-b from-[#232323] to-gray-950 h-full border-none relative isolate">
           <div className="absolute w-full h-full left-0 top-0 opacity-20 group-hover:opacity-100 transition-opacity duration-500 -z-10">
             <ParticlesBackground amount={50} />
@@ -103,7 +103,7 @@ function PopularPosts() {
       />
       <MaxWidthWrapper className="py-10 my-20">
         <SectionHeading heading="Popular Posts" />
-        <div className="grid grid-cols-3 gap-10 mt-16">
+        <div className="gap-10 mt-16 grid grid-cols-1 max-w-sm mx-auto md:max-w-screen-md md:grid-cols-2 lg:max-w-screen-xl lg:grid-cols-3">
           <PopularPostCard
             imageUrl="https://img.youtube.com/vi/31B-zBRkh5I/maxresdefault.jpg"
             title="Compile aseprite from source"
@@ -117,7 +117,7 @@ function PopularPosts() {
           <PopularPostCard
             imageUrl="https://img.youtube.com/vi/zoh-0niANDw/maxresdefault.jpg"
             title="Starting with discord bots"
-            description="Creating discord bot in python is very begineer friendly using discord.py"
+            description="Creating discord bot in python is very beginner friendly using discord.py"
           />
         </div>
       </MaxWidthWrapper>
@@ -131,7 +131,7 @@ type TestimonalCardProps = {
 };
 function TestimonialCard({ author, content, role }: TestimonalCardProps) {
   return (
-    <SpotlightCard>
+    <SpotlightCard className="max-w-[380px] w-full">
       <Link href="" className="h-full group">
         <Card className="bg-gradient-to-b from-[#232323] to-gray-950 h-full border-none relative isolate">
           <div className="absolute w-full h-full left-0 top-0 opacity-20 group-hover:opacity-100 transition-opacity duration-500 -z-10">
@@ -143,7 +143,7 @@ function TestimonialCard({ author, content, role }: TestimonalCardProps) {
           <CardContent>{content}</CardContent>
           <CardFooter>
             <div className="ml-auto">- {role}</div>
-          </CardFooter>{" "}
+          </CardFooter>
         </Card>
       </Link>
     </SpotlightCard>
@@ -161,7 +161,7 @@ function Testimonials() {
 
       <MaxWidthWrapper className="py-10 my-20">
         <SectionHeading heading="Testimonials" />
-        <div className="grid grid-cols-3 mt-16 gap-10">
+        <div className="gap-10 mt-16 grid grid-cols-1 max-w-sm mx-auto md:max-w-screen-md md:grid-cols-2 lg:max-w-screen-xl lg:grid-cols-3">
           {/* <div className="flex flex-wrap items-center justify-center gap-10 mt-16"> */}
           <TestimonialCard
             author="royaldakat5833 "

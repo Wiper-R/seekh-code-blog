@@ -54,7 +54,7 @@ class Particle {
     }
 
     if (this.y < 0) {
-      this.x = canvasSize.height;
+      this.y = canvasSize.height;
     }
 
     const buffer = 50; // In pixels
@@ -79,9 +79,11 @@ export function ParticlesBackground({
   color?: string;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animationRef = useRef<number | null>(null); // Store the animation frame ID
   const [parentSize, setParentSize] = useState({ width: 0, height: 0 });
   const [particles, setParticles] = useState<Particle[]>([]);
   color = color || "255, 255, 255";
+
   useEffect(() => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
@@ -102,6 +104,7 @@ export function ParticlesBackground({
       if (parent) resizeObserver.unobserve(parent);
     };
   }, [canvasRef.current]);
+
   useEffect(() => {
     const _particles: Particle[] = [];
     for (let i = 0; i < amount; i++) {
@@ -109,13 +112,13 @@ export function ParticlesBackground({
     }
     setParticles(_particles);
   }, [parentSize]);
+
   useEffect(() => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      return;
-    }
+    if (!ctx) return;
+
     const animateParticles = () => {
       ctx.clearRect(0, 0, parentSize.width, parentSize.height);
       particles.forEach((particle) => {
@@ -125,11 +128,20 @@ export function ParticlesBackground({
         ctx.fillStyle = `rgba(${color}, ${Math.max(particle.o, 0)})`;
         ctx.fill();
       });
-      requestAnimationFrame(animateParticles);
+
+      // Store the animation frame ID
+      animationRef.current = requestAnimationFrame(animateParticles);
     };
 
     animateParticles();
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current); // Cancel the animation frame on cleanup
+      }
+    };
   }, [particles, parentSize]);
+
   return (
     <canvas
       className="absolute left-0 top-0 right-0 bottom-0 -z-10"

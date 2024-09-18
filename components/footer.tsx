@@ -10,8 +10,8 @@ export function Footer() {
     <div className="mt-auto">
       <hr />
       <footer className="p-6">
-        <MaxWidthWrapper className="flex items-center justify-between">
-          <div className="flex gap-2 items-center">
+        <MaxWidthWrapper className="flex items-center justify-between flex-wrap gap-x-10 gap-y-6">
+          <div className="flex gap-2 items-center flex-wrap">
             <img src={SeekhCodeIcon.src} className="w-14" />
             <span>Seekh Code</span>
             <span className="text-3xl mx-2">|</span>
