@@ -9,6 +9,7 @@ import { LexicalEditor } from "lexical";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Post } from "@prisma/client";
+import ReactSelectCreatable from "react-select/creatable";
 import {
   Dialog,
   DialogTrigger,
@@ -20,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 
 export default function EditPostPage({
   params: { slug },
@@ -88,14 +90,27 @@ export default function EditPostPage({
                   />
                 </div>
                 <div className="grid gap-4">
-                  <Label htmlFor="slug" className="">
-                    Slug
-                  </Label>
+                  <Label htmlFor="slug">Slug</Label>
                   <Input
                     id="slug"
                     value={newSlug}
                     onChange={(e) => {
                       setNewSlug(e.target.value);
+                    }}
+                  />
+                </div>
+                <div className="grid gap-4">
+                  <Label htmlFor="tags">Tags</Label>
+                  <ReactSelectCreatable
+                    classNames={{
+                      control: ({ isFocused }) =>
+                        cn(
+                          "!bg-transparent text-white !border",
+                          isFocused && "!border-white !outline-none"
+                        ),
+                      input: () => "!text-white",
+                      option: () => "!bg-transparent",
+                      menu: () => "border !bg-primary-foreground",
                     }}
                   />
                 </div>

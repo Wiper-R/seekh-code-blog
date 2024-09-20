@@ -497,7 +497,7 @@ function ToolbarPlugin() {
   }, [editor]);
   return (
     // Button Group
-    <div className="flex gap-2 sticky top-0 z-10 bg-stone-900">
+    <div className="flex gap-2 sticky top-0 z-10 bg-stone-900 flex-wrap p-4">
       <BlockFormatDropdown blockType={blockType} editor={editor} />
       <RichTextOptions
         editor={editor}

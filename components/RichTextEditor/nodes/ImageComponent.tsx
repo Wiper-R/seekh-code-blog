@@ -83,7 +83,7 @@ function LazyImage({
       ref={imageRef}
       style={{
         height,
-        maxWidth,
+        maxWidth: `min(${maxWidth}, 100%)`,
         width,
       }}
       onError={onError}

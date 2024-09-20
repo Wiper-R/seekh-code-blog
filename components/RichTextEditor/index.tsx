@@ -38,7 +38,7 @@ const theme: EditorThemeClasses = {
     underline: "article-text-underline",
     strikethrough: "article-text-strikethrough",
   },
-  image: "editor-image",
+  image: "article-image",
   heading: {
     h1: "article-heading-h1",
     h2: "article-heading-h2",
@@ -168,7 +168,7 @@ function RichTextEditor({
             <div ref={onRef} className="flex-grow flex relative">
               <ContentEditable
                 className={cn(
-                  "flex-grow outline-none border-border border rounded text-lg px-8 py-2 resize-y focus:border-primary"
+                  "flex-grow outline-none border-border border rounded text-lg px-8 py-2 resize-y focus:border-primary article-container"
                 )}
               />
               <DraggableBlockPlugin anchorElem={anchorElem} />
