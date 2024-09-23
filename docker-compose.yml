@@ -1,5 +1,5 @@
 services:
-  nextjs-app:
+  www:
     container_name: seekhcode-www
     build:
       context: .
