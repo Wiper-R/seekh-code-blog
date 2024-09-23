@@ -9,7 +9,7 @@ generator client {
 }
 
 model User {
-  id            String    @id @map("_id")
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   username      String
   email         String    @unique
@@ -25,8 +25,8 @@ model User {
 }
 
 model Account {
-  id                String  @id @map("_id")
-  userId            String
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
   type              String
   provider          String
   providerAccountId String
@@ -47,9 +47,9 @@ model Account {
 }
 
 model Session {
-  id           String   @id @map("_id")
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
   sessionToken String   @unique
-  userId       String
+  userId       String   @db.ObjectId
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -68,9 +68,9 @@ model VerificationToken {
 
 // Optional for WebAuthn support
 model Authenticator {
-  id                   String  @id @map("_id")
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
   credentialID         String  @unique
-  userId               String
+  userId               String  @db.ObjectId
   providerAccountId    String
   credentialPublicKey  String
   counter              Int
@@ -84,13 +84,13 @@ model Authenticator {
 }
 
 model Post {
-  id          String   @id @map("_id")
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   slug        String   @unique
   title       String
   description String
   content     String
   coverImage  String?
-  authorId    String
+  authorId    String   @db.ObjectId
   status      String
   createdAt   DateTime @default(now())
   publishedAt DateTime @default(now())
