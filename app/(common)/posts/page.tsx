@@ -5,6 +5,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import moment from "moment";
 
+export const dynamic = "force-dynamic";
+
 export default async function Page() {
   const result = await fetchPosts();
   if (!result.success) throw new Error();

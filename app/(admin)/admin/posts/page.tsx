@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { Post } from "@prisma/client";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function PostsPage() {
   const result = await getAdminPanelPosts();
   var posts: Post[] = [];
