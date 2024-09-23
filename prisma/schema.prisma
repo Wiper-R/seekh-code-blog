@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
@@ -9,7 +9,7 @@ generator client {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @map("_id")
   name          String?
   username      String
   email         String    @unique
@@ -25,6 +25,7 @@ model User {
 }
 
 model Account {
+  id                String  @id @map("_id")
   userId            String
   type              String
   provider          String
@@ -42,10 +43,11 @@ model Account {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@id([provider, providerAccountId])
+  @@unique([provider, providerAccountId])
 }
 
 model Session {
+  id           String   @id @map("_id")
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -56,15 +58,17 @@ model Session {
 }
 
 model VerificationToken {
+  id         String   @id @map("_id")
   identifier String
   token      String
   expires    DateTime
 
-  @@id([identifier, token])
+  @@unique([identifier, token])
 }
 
 // Optional for WebAuthn support
 model Authenticator {
+  id                   String  @id @map("_id")
   credentialID         String  @unique
   userId               String
   providerAccountId    String
@@ -76,11 +80,11 @@ model Authenticator {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@id([userId, credentialID])
+  @@unique([userId, credentialID])
 }
 
 model Post {
-  id          String   @id @default(cuid())
+  id          String   @id @map("_id")
   slug        String   @unique
   title       String
   description String
@@ -95,5 +99,5 @@ model Post {
 }
 
 model Tag {
-  name String @id
+  name String @id @map("_id")
 }

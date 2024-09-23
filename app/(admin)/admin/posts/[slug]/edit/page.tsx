@@ -22,6 +22,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { createTag, getTags } from "@/actions/tags";
 
 export default function EditPostPage({
   params: { slug },
@@ -33,6 +34,7 @@ export default function EditPostPage({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [newSlug, setNewSlug] = useState("");
+  const [availableTags, setAvailabeTags] = useState<string[]>([]);
   useEffect(() => {
     async function checkCanEdit() {
       const result = await fetchForEditPost({ slug });
@@ -47,6 +49,15 @@ export default function EditPostPage({
       setNewSlug(post.slug);
     }
     checkCanEdit();
+  }, []);
+  useEffect(() => {
+    async function fetchTags() {
+      const result = await getTags();
+      if (result.success) {
+        setAvailabeTags(result.data.map((t) => t.name));
+      }
+    }
+    fetchTags();
   }, []);
   const [editor, setEditor] = useState<LexicalEditor | null>(null);
   if (!post) return "Loading";
@@ -102,6 +113,10 @@ export default function EditPostPage({
                 <div className="grid gap-4">
                   <Label htmlFor="tags">Tags</Label>
                   <ReactSelectCreatable
+                    isMulti={true}
+                    options={availableTags.map((tag) => {
+                      return { label: tag, value: tag };
+                    })}
                     classNames={{
                       control: ({ isFocused }) =>
                         cn(
