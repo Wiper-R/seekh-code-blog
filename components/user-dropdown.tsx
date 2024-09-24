@@ -22,7 +22,7 @@ export function UserDropdown({ user }: { user: User }) {
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        {user.email == "rshivang12345@gmail.com" && (
+        {["rshivang12345@gmail.com", "rdhruva12345@gmail.com"].includes(user.email!) && (
           <Link href="/admin">
             <DropdownMenuItem>Admin</DropdownMenuItem>
           </Link>
