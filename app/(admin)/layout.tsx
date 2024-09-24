@@ -9,7 +9,14 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
-  if (session?.user?.email != "rshivang12345@gmail.com") redirect("/not-found");
+  if (
+    session?.user?.email &&
+    ["rshivang12345@gmail.com", "rdhruva12345@gmail.com"].includes(
+      session.user.email
+    )
+  ) {
+    redirect("/");
+  }
   return (
     <div className="h-screen w-screen relative">
       <Dashboard>
