@@ -10,8 +10,8 @@ export default async function AdminLayout({
 }) {
   const session = await auth();
   if (
-    session?.user?.email &&
-    ["rshivang12345@gmail.com", "rdhruva12345@gmail.com"].includes(
+    !session?.user?.email ||
+    !["rshivang12345@gmail.com", "rdhruva12345@gmail.com"].includes(
       session.user.email
     )
   ) {

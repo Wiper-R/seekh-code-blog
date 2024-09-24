@@ -15,7 +15,10 @@ export const createPost = actionWrapper(async (_data: CreatePostSchema) => {
   const data = await CreatePostSchema.parseAsync(_data);
   const user = await getUser();
   if (!user) throw UnAuthenticated;
-  if (user.email !== "rshivang12345@gmail.com") throw Forbidden;
+  if (
+    !["rshivang12345@gmail.com", "rdhruva12345@gmail.com"].includes(user.email)
+  )
+    throw Forbidden;
   const post = await db.post.create({
     data: {
       content: data.content,
@@ -43,7 +46,10 @@ async function generateRandomSlug() {
 export const createBlankPost = actionWrapper(async (_data: {}) => {
   const user = await getUser();
   if (!user) throw UnAuthenticated;
-  if (user.email !== "rshivang12345@gmail.com") throw Forbidden;
+  if (
+    !["rshivang12345@gmail.com", "rdhruva12345@gmail.com"].includes(user.email)
+  )
+    throw Forbidden;
   const slug = await generateRandomSlug();
   const post = await db.post.create({
     data: {
