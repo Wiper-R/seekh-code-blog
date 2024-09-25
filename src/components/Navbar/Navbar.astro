@@ -1,0 +1,22 @@
+---
+import { Image } from "astro:assets";
+import MaxWithWrapper from "@/layouts/MaxWithWrapper.astro";
+import Logo from "@/images/seekh-code.png";
+
+const NavLinks = [{ href: "https://github.com/wiperr", label: "Github" }];
+---
+
+<header class="dark:bg-black">
+  <MaxWithWrapper className="flex justify-between">
+    <Image src={Logo} alt="Logo" class="w-16 h-16" />
+    <div class="flex gap-1 items-center">
+      {
+        NavLinks.map((link) => (
+          <a href={link.href} class="dark:text-white">
+            {link.label}
+          </a>
+        ))
+      }
+    </div>
+  </MaxWithWrapper>
+</header>

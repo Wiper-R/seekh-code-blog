@@ -1,0 +1,71 @@
+---
+import BaseHead from "@/components/BaseHead.astro";
+import { type CollectionEntry } from "astro:content";
+import MaxWithWrapper from "./MaxWithWrapper.astro";
+type Props = CollectionEntry<"blog">["data"];
+import moment from "moment";
+import { authors } from "@/data/authors";
+
+const { title, description, pubDate, updatedDate, heroImage, authorId } =
+  Astro.props;
+
+const author = authors[authorId];
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      article.blog {
+        @apply text-lg;
+        p {
+          @apply text-lg;
+        }
+
+        .astro-code {
+          @apply p-5 my-5 rounded;
+        }
+
+        ul,
+        ol {
+          @apply ml-4;
+        }
+        ul {
+          list-style-type: disc;
+        }
+        ol {
+          list-style-type: decimal;
+        }
+      }
+    </style></head
+  >
+
+  <body>
+    <MaxWithWrapper className="max-w-screen-lg">
+      {heroImage && <img src={heroImage} alt="" />}
+      <h1 class="text-5xl my-4 font-semibold">
+        {title}
+      </h1>
+      <div class="flex gap-2 items-center">
+        <img src={author.avatar} alt="" class="h-12 w-12 rounded-full" />
+        <div class="flex flex-col justify-center">
+          <span>{author.name}</span>
+          <span class="flex flex-col">
+            <span>{moment(pubDate).format("DD-MMM-YYYY")}</span>
+          </span>
+        </div>
+      </div>
+      <!-- <span>
+        By:
+        <a href={author.url} class="hover:underline">
+          <span> {author.name}</span>
+        </a></span
+      > -->
+      <!-- <span class="block">Published: Tue Sep 24</span> -->
+      <hr class="my-10" />
+      <article class="blog">
+        <slot />
+      </article>
+    </MaxWithWrapper>
+  </body>
+</html>
