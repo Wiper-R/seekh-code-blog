@@ -10,4 +10,9 @@ export const authors: { [k: string]: Author } = {
     website: "https://github.com/wiper-r",
     avatar: "/avatars/wiperr.png",
   },
+  dhruva: {
+    name: "Dhruva",
+    website: "https://github.com/dhruva430",
+    avatar: "/avatars/dhruva.jpg",
+  },
 };

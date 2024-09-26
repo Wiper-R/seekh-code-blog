@@ -1,7 +1,6 @@
 ---
 import Navbar from "@/components/Navbar/Navbar.astro";
 import { MaxWidthWrapper } from "../layouts/MaxWidthWrapper";
-// import "@/styles/global.scss";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/button";
@@ -12,8 +11,13 @@ import Footer from "@/components/Footer.astro";
 
 <BaseLayout>
   <Fragment slot="head">
-    <title>Astro</title>
-    <meta name="description" content="Test" />
+    <title>SeekhCode</title>
+    <meta
+      name="description"
+      content="Welcome to Seekh Code – your gateway to free, high-quality coding
+          tutorials and insights. Dive into our resources and elevate your
+          skills effortlessly."
+    />
   </Fragment>
   <div class="min-h-screen flex flex-col">
     <Navbar />
