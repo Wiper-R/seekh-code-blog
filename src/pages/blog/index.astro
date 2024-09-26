@@ -1,0 +1,47 @@
+---
+import { authors } from "@/data/authors";
+import MainLayout from "@/layouts/MainLayout.astro";
+import { MaxWidthWrapper } from "@/layouts/MaxWidthWrapper";
+import { getCollection } from "astro:content";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<MainLayout>
+  <MaxWidthWrapper className="my-10">
+    <div class="max-w-screen-md">
+      {
+        posts.map(({ slug, data }) => {
+          const author = authors[data.authorId];
+          return (
+            <div class="flex justify-between relative">
+              <a href={`/blog/${slug}`} class="absolute inset-0" />
+              <div class="flex flex-col">
+                <div class="pointer-events-none z-10">
+                  <div class="flex items-center gap-2 pointer-events-auto">
+                    <img src={author.avatar} class="rounded-full w-8 h-8" />
+                    <a
+                      href={author.website}
+                      class="flex gap-2 text-gray-200 items-center hover:underline"
+                    >
+                      {author.name}
+                    </a>
+                  </div>
+                </div>
+                <h4 class="text-3xl text-white font-semibold mt-2">
+                  {data.title}
+                </h4>
+                <p class="line-clamp-3 text-gray-300 mt-4">
+                  {data.description}
+                </p>
+              </div>
+              <img src={data.heroImage} alt="" class="w-32 h-32 object-cover" />
+            </div>
+          );
+        })
+      }
+    </div></MaxWidthWrapper
+  >
+</MainLayout>

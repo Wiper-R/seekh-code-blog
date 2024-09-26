@@ -1,71 +1,182 @@
 ---
 import BaseHead from "@/components/BaseHead.astro";
 import { type CollectionEntry } from "astro:content";
-import MaxWithWrapper from "./MaxWithWrapper.astro";
-type Props = CollectionEntry<"blog">["data"];
+type Props = CollectionEntry<"blog">;
 import moment from "moment";
 import { authors } from "@/data/authors";
+import MainLayout from "./MainLayout.astro";
+import { getReadingTime } from "@/lib/utils";
 
 const { title, description, pubDate, updatedDate, heroImage, authorId } =
-  Astro.props;
+  Astro.props.data;
+
+const body = Astro.props.body;
 
 const author = authors[authorId];
 ---
 
-<html lang="en">
-  <head>
-    <BaseHead title={title} description={description} />
-    <style>
-      article.blog {
+<MainLayout>
+  <BaseHead title={title} description={description} />
+  <style>
+    article.blog {
+      @apply text-white;
+
+      @apply text-lg;
+
+      > * {
+        @apply my-2;
+      }
+
+      p {
+        @apply text-lg mb-4;
+      }
+
+      .astro-code {
+        @apply p-5 rounded-lg border border-border/40 text-base;
+      }
+
+      ul,
+      ol {
+        @apply ml-4 pl-4 list-outside; /* Adjust spacing for better alignment */
+      }
+
+      ul {
+        list-style-type: disc;
+      }
+
+      ol {
+        list-style-type: decimal;
+      }
+
+      /* Add space between list items */
+      ul li,
+      ol li {
+        @apply mb-2; /* Add margin to separate items */
+      }
+
+      blockquote {
+        @apply italic border-l-4 border-gray-600 pl-4 text-gray-400;
+      }
+
+      pre {
+        @apply bg-zinc-900 p-4 rounded-lg text-sm overflow-x-auto;
+      }
+
+      a {
+        @apply text-blue-400 hover:underline;
+      }
+
+      hr {
+        @apply my-8 border-t border-border/40;
+      }
+
+      img {
+        @apply rounded-lg max-w-full h-auto mx-auto;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        @apply font-bold;
+      }
+
+      h1 {
+        @apply text-4xl;
+      }
+
+      h2 {
+        @apply text-3xl my-6;
+      }
+
+      h3 {
+        @apply text-2xl;
+      }
+
+      h4 {
+        @apply text-xl;
+      }
+
+      h5 {
         @apply text-lg;
-        p {
-          @apply text-lg;
-        }
+      }
 
-        .astro-code {
-          @apply p-5 my-5 rounded;
-        }
+      h6 {
+        @apply text-base;
+      }
 
-        ul,
-        ol {
-          @apply ml-4;
-        }
-        ul {
-          list-style-type: disc;
-        }
-        ol {
-          list-style-type: decimal;
+      figure {
+        figcaption {
+          @apply text-sm text-gray-400 italic text-center;
         }
       }
-    </style></head
-  >
 
-  <body>
-    <MaxWithWrapper className="max-w-screen-lg">
-      {heroImage && <img src={heroImage} alt="" />}
-      <h1 class="text-5xl my-4 font-semibold">
-        {title}
-      </h1>
-      <div class="flex gap-2 items-center">
-        <img src={author.avatar} alt="" class="h-12 w-12 rounded-full" />
-        <div class="flex flex-col justify-center">
-          <span>{author.name}</span>
-          <span class="flex flex-col">
-            <span>{moment(pubDate).format("DD-MMM-YYYY")}</span>
-          </span>
-        </div>
+      tbody tr {
+        &:hover {
+          td {
+            @apply bg-zinc-800;
+          }
+        }
+        &:not(:last-of-type) {
+          @apply border-border/40 border-b;
+        }
+      }
+
+      th,
+      td {
+        @apply px-4 py-2 bg-start min-w-[140px] text-left;
+      }
+
+      th {
+        @apply font-semibold border-b border-border/40 text-gray-400;
+      }
+
+      td {
+        @apply text-gray-300;
+      }
+
+      th:first-of-type {
+        @apply rounded-tl-lg;
+      }
+
+      th:last-of-type {
+        @apply rounded-tr-lg;
+      }
+
+      tr:last-of-type td:first-of-type {
+        @apply rounded-bl-lg;
+      }
+
+      tr:last-of-type td:last-of-type {
+        @apply rounded-br-lg;
+      }
+    }
+  </style>
+  <div class="max-w-screen-md mx-auto text-black dark:text-white py-10 px-4">
+    {
+      heroImage && (
+        <img src={heroImage} alt="" class="w-full object-contain my-10" />
+      )
+    }
+    <h1 class="text-5xl my-4 font-semibold">
+      {title}
+    </h1>
+    <p class="my-4 text-2xl">{description}</p>
+    <div class="flex gap-2 items-center">
+      <img src={author.avatar} alt="" class="h-12 w-12 rounded-full" />
+      <div class="flex flex-col justify-center">
+        <span>{author.name}</span>
+        <span class="space-x-4">
+          <span>Published {moment(pubDate).format("DD-MMM-YYYY")}</span>
+          <span>{getReadingTime(body)}</span>
+        </span>
       </div>
-      <!-- <span>
-        By:
-        <a href={author.url} class="hover:underline">
-          <span> {author.name}</span>
-        </a></span
-      > -->
-      <!-- <span class="block">Published: Tue Sep 24</span> -->
-      <hr class="my-10" />
-      <article class="blog">
-        <slot />
-      </article>
-    </MaxWithWrapper>
-  </body>
-</html>
+    </div>
+    <hr class="mt-10 mb-20" />
+    <article class="blog">
+      <slot />
+    </article>
+  </div>
+</MainLayout>

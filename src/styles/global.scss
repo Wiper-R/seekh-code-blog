@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  --primary-background: 255 255 255;
+  --start: 255 255 255;
+  --end: 240 240 240;
+  --border: 100 100 100;
+
+  .dark {
+    --primary-background: 0 0 0;
+    --start: 35 35 35;
+    --end: 3, 7, 18;
+  }
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background-image: linear-gradient(
+    to bottom,
+    rgb(var(--start)),
+    rgb(var(--end))
+  );
+  background-attachment: fixed;
+
+  @apply text-black dark:text-white;
+}

@@ -1,0 +1,150 @@
+---
+title: "Bitwise Operators"
+description: "A bitwise operator is a character that represents an action on data at the bit level, as opposed to bytes sor largett units of data."
+pubDate: "Sep 25 2022"
+heroImage: "/posts/bitwise-operators.jpg"
+authorId: wiperr
+---
+
+import Table from "@/components/Table.astro";
+
+A bitwise operator is a character that represents an action on data at the bit level, as opposed to bytes sor largett units of data. More simply put, it is an operator that enables the manipulation of individual bits in a binary pattern.
+
+Bitwise operators are used in Communication stacks where the individual bits in the header attached to the data signify important information. Apart from that they are used in low-level programming for applications such as device drivers, cryptographic software, video decoding software, memory allocators, and graphics.
+
+## Types of Bitwise Operators
+
+### 1. & (bitwise AND)
+
+It takes two numbers as operands and does AND on every bit of two numbers. The result of AND is 1 only if both bits are 1.
+
+<Table caption="Bitwise & (AND)" className="font-mono">
+
+| A   | B   | =         |
+| --- | --- | --------- |
+| 0   | 0   | 0 & 0 = 0 |
+| 1   | 0   | 1 & 0 = 0 |
+| 0   | 1   | 0 & 1 = 0 |
+| 1   | 1   | 1 & 1 = 1 |
+
+</Table>
+
+### 2. & (bitwise AND)
+
+It take two numbers as operands and does OR on every bit of two numbers. The result of OR is 1 if any of the two bits is 1.
+
+<Table caption="Bitwise | (OR)" className="font-mono">
+
+| A   | B   | =          |
+| --- | --- | ---------- |
+| 0   | 0   | 0 \| 0 = 0 |
+| 1   | 0   | 1 \| 0 = 1 |
+| 0   | 1   | 0 \| 1 = 1 |
+| 1   | 1   | 1 \| 1 = 1 |
+
+</Table>
+
+### 3. ^ (bitwise XOR)
+
+It takes two number as operands and does XOR on every bit of two number. The result of XOR is 1 if the two bits are different.
+
+<Table caption="Bitwise ^ (XOR)" className="font-mono">
+
+| A   | B   | =         |
+| --- | --- | --------- |
+| 0   | 0   | 0 ^ 0 = 0 |
+| 1   | 0   | 1 ^ 0 = 1 |
+| 0   | 1   | 0 ^ 1 = 1 |
+| 1   | 1   | 1 ^ 1 = 1 |
+
+</Table>
+
+### 4. ~ (bitwise NOT)
+
+It takes one number and inverts all bits of it.
+
+{/* {/\* <p className="text-center">Bitwise ~ (NOT)</p> */}
+
+<Table caption="Bitwise ~ (NOT)" className="font-mono">
+
+| A   | =      |
+| --- | ------ |
+| 0   | ~0 = 1 |
+| 1   | ~1 = 0 |
+
+</Table>
+
+### 5. \<\< (Left shift)
+
+It takes two numbers, the left shifts the bits of the first operand, and the second operand decides the number of places to shift.
+
+### 6. \>\> (Right Shift)
+
+It take two number, the right shifts the bits of the first operand, and the second operand decides the number of places to shift.
+
+## Benefits of Bitwise Operators
+
+Bitwise operators are used primarily in programming and digital logic to perform operations on binary representations of integers. Here are some key uses and benefits of bitwise operators.
+
+1. Efficiency:
+
+   - Performance: Bitwise operations are generally faster than arithmetic operations because they operate directly on the binary representations of numbers.
+   - Memory Usage: They can be used to manipulate single bits, which can save memory in applications that require large amounts of data.
+
+2. Low-Level Programming:
+
+   - Hardware Control: Bitwise operators are essential for low-level programming, such as device drivers and embedded systems, where direct manipulation of hardware registers is required.
+   - Flags and Bit Masks: They allow for efficient management of flags and states using bit masks. For example, you can use a single integer to represent multiple boolean values.
+
+3. Data Compression:
+
+   - Compact Storage: Bitwise operations can be used to pack multiple boolean values into a single integer, reducing memory usage in applications like image processing or network protocols.
+
+4. Algorithms:
+
+   - Efficient Algorithms: Many algorithms, such as those involving graphics (like texture mapping) or cryptography, utilize bitwise operations for efficiency.
+   - Set Operations: Bitwise operators can be used to perform set operations (like union and intersection) on collections of flags.
+
+5. Cryptography:
+   - Data Security: Bitwise operations are used in encryption algorithms to manipulate data at the bit level, enhancing security measures.
+
+<strong>
+  Here is a simple example in Python demonstrating the use of bitwise operators:
+</strong>
+
+```c
+#include <stdio.h>
+
+int main() {
+    int a = 12;  // binary: 1100
+    int b = 5;   // binary: 0101
+
+    // Bitwise AND
+    int result_and = a & b;  // result: 4 (binary: 0100)
+    printf("Bitwise AND: %d\n", result_and);
+
+    // Bitwise OR
+    int result_or = a | b;   // result: 13 (binary: 1101)
+    printf("Bitwise OR: %d\n", result_or);
+
+    // Bitwise XOR
+    int result_xor = a ^ b;  // result: 9 (binary: 1001)
+    printf("Bitwise XOR: %d\n", result_xor);
+
+    // Bitwise NOT
+    int result_not = ~a;     // result: -13 (inverts bits)
+    printf("Bitwise NOT: %d\n", result_not);
+
+    // Left Shift
+    int result_left_shift = a << 1;  // result: 24 (binary: 11000)
+    printf("Left Shift: %d\n", result_left_shift);
+
+    // Right Shift
+    int result_right_shift = a >> 1;  // result: 6 (binary: 0110)
+    printf("Right Shift: %d\n", result_right_shift);
+
+    return 0;
+}
+```
+
+In summary, bitwise operators are powerful tools for efficient programming and data manipulation, especially in scenarios requiring high performance and low-level control.
