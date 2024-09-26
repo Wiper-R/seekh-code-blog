@@ -6,6 +6,7 @@ import moment from "moment";
 import { authors } from "@/data/authors";
 import MainLayout from "./MainLayout.astro";
 import { getReadingTime } from "@/lib/utils";
+import { Image } from "astro:assets";
 
 const { title, description, pubDate, updatedDate, heroImage, authorId } =
   Astro.props.data;
@@ -16,7 +17,7 @@ const author = authors[authorId];
 ---
 
 <MainLayout>
-  <BaseHead title={title} description={description} image={heroImage} />
+  <BaseHead title={title} description={description} image={heroImage.src} />
   <style>
     article.blog {
       @apply text-white;
@@ -157,7 +158,7 @@ const author = authors[authorId];
   <div class="max-w-screen-md mx-auto text-black dark:text-white py-10 px-4">
     {
       heroImage && (
-        <img src={heroImage} alt="" class="w-full object-contain my-10" />
+        <Image src={heroImage} alt="" class="w-full object-contain my-10" />
       )
     }
     <h1 class="text-5xl my-4 font-semibold">

@@ -2,7 +2,7 @@
 title: "Recurrent Neural Networks"
 description: "Recurrent neural networks, also known as RNNs, are a class of neural networks that allow previous outputs to be used as inputs while having hidden states."
 pubDate: "Sep 26 2022"
-heroImage: "/assets/posts/rnn/rnn.jpeg"
+heroImage: "./rnn.jpeg"
 authorId: dhruva
 ---
 
@@ -12,7 +12,7 @@ The main and most important feature of RNN is its Hidden state, which remembers 
 
 RNN has hidden layers that act as memory locations to store the outputs of a layer in a loop.
 
-![alt text](https://i.imgur.com/b3jLxzi.png "RNN")
+![alt text](https://i.imgur.com/b3jLxzi.png)
 Visually, a typical RNN structure consists of a single computational unit with a self-connected hidden state, through which information cycles across timesteps:
 
 ## Unfolding RNN
@@ -25,7 +25,7 @@ We unfold an RNN to understand how it thinks and learns from each step. It’s l
 
 A one-to-one is the simplest type of RNN.It takes one input and produces one output. Think of it as a person who listens to a single word, processes it, and then speaks one response based on that word. There’s no sequence involved here just a single step. The RNN remembers the input with its hidden state, which helps it produce the output.
 
-![alt text](/assets/posts/rnn/one-to-one.png "RNN")
+![alt text](one-to-one.png)
 
 In other words, a one-to-one handles just one input and one output at a time, like a basic question-answer interaction.
 
@@ -33,7 +33,7 @@ In other words, a one-to-one handles just one input and one output at a time, li
 
 A one-to-many takes one input and produces a sequence of multiple outputs over time, like starting with one word and generating a whole sentence from it.
 
-![alt text](/assets/posts/rnn/one-to-many.png "RNN")
+![alt text](one-to-many.png)
 
 ### 3. Many to One
 
@@ -41,7 +41,7 @@ A many-to-one takes a sequence of multiple inputs and produces a single output.
 
 It's like reading an entire paragraph (many inputs) and then summarizing it in one sentence (one output).
 
-![alt text](/assets/posts/rnn/many-to-one.png "RNN")
+![alt text](many-to-one.png)
 
 ### 4. Many to Many
 
@@ -55,11 +55,11 @@ Equal Unit Size: In this case, the number of both the input and output units is 
 
 Unequal Unit Size: In this case, inputs and outputs have different numbers of units. Its application can be found in Machine Translation.
 
-![alt text](/assets/posts/rnn/many-to-many-equal.png "RNN")
+![alt text](many-to-many-equal.png)
 
 ### 6. Many-to-Many (Unequal)
 
-![alt text](/assets/posts/rnn/many-to-many-equal.png "RNN")
+![alt text](many-to-many-equal.png)
 
 ## Benefits of RNN
 
