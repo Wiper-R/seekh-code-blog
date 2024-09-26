@@ -10,7 +10,7 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
   site: "http://seekhcode.me",
-  base: "/seekh-code-blog",
+  // base: "/seekh-code-blog",
   integrations: [tailwind(), react({ experimentalReactChildren: true }), mdx()],
   markdown: {
     shikiConfig: { theme: "slack-dark" },
