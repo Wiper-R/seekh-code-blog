@@ -39,11 +39,13 @@ const posts = (await getCollection("blog")).sort(
                     {data.description}
                   </p>
                 </div>
-                <Image
-                  src={data.heroImage}
-                  alt=""
-                  class="w-32 h-32 object-cover"
-                />
+                {data.heroImage && (
+                  <Image
+                    src={data.heroImage}
+                    alt=""
+                    class="w-32 h-32 object-cover"
+                  />
+                )}
               </div>
               <hr class="border-border/20 border" />
             </>
