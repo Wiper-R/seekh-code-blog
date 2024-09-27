@@ -1,0 +1,205 @@
+---
+title: "Server Actions Pattern"
+description: "I used trpc and like how it provide a type safe interface and error handling. But can we achieve same thing with server actions?"
+pubDate: "2024-09-27T06:43:21.898Z"
+heroImage: "./server-actions.jpg"
+authorId: wiperr
+---
+
+Many of us love `tRPC`, not just because it's easy to use, but also because it provides a type-safe interface and built-in error handling. But what if we could achieve the same functionality with Next.js server actions? In this post, we'll explore how to mimic a similar workflow in server actions.
+
+## How do we currently use server actions?
+
+Let's start with a basic server action setup.
+
+### **Server**
+
+```ts
+"use server";
+
+type CreatePostData = {
+  title: string;
+  description: string;
+  content: string;
+};
+
+async function createPost(data: CreatePostData) {
+  await createDBPost({ ...data });
+}
+```
+
+### **Client**
+
+```tsx
+async function handleClick() {
+  await createPost(myFormData);
+}
+
+<button onClick={handleClick}>Create Post</button>;
+```
+
+**Note**: Remember, you can't trust client-side requests, so it's crucial to validate and sanitize the data on the server side.
+
+---
+
+### So, what now?
+
+To ensure data integrity, we'll add a step for request validation using `zod`.
+
+## Modified Server Action with Validation
+
+```ts
+"use server";
+
+import { z } from "zod";
+
+type CreatePostData = {
+  title: string;
+  description: string;
+  content: string;
+};
+
+const schema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(10),
+  content: z.string().min(100),
+});
+
+async function createPost(data: CreatePostData) {
+  try {
+    const validatedData = await schema.parseAsync(data);
+    await createDBPost({ ...validatedData });
+  } catch (e) {
+    return { message: "Something went wrong" };
+  }
+}
+```
+
+We've added validation with `zod`, but there's another problem you might have noticed: What if we want to return data on success? While it's possible, handling this in the client can get tricky.
+
+### Simplifying Client-Server Response Handling
+
+Let's define a common response structure to make handling these cases easier.
+
+```ts
+type Response<T> =
+  | { success: true; data: T }
+  | { success: false; error: string };
+```
+
+Now, the server can respond with either success or failure, and the client can handle both cases seamlessly.
+
+```ts
+if (!error) {
+  return { success: true, data: someData };
+}
+return { success: false, error: "Error message" };
+```
+
+But repeating this pattern in complex server actions can get tedious. A more reusable approach is needed.
+
+---
+
+## The Solution: A Server Action Wrapper
+
+To streamline validation and error handling, we'll create a wrapper for server actions.
+
+```ts
+// server-action-helper.ts
+
+import { z, ZodError, ZodSchema } from "zod";
+
+type ServerActionReturnType<T> =
+  | { success: true; data: T }
+  | { success: false; error: string };
+
+// APIError to standardize error handling
+class APIError extends Error {
+  status: number;
+  constructor({ message, status = 500 }: { message: string; status?: number }) {
+    super(message);
+    this.status = status;
+  }
+}
+
+// The server action wrapper
+export const serverActionWrapper = <T extends ZodSchema, R>({
+  schema,
+  callback,
+}: {
+  schema: T;
+  callback: (input: z.infer<T>) => Promise<R>;
+}) => {
+  return async (input: z.infer<T>): Promise<ServerActionReturnType<R>> => {
+    try {
+      const validatedInput = await schema.parseAsync(input);
+      const data = await callback(validatedInput);
+      return { success: true, data };
+    } catch (e) {
+      let message = "An error occurred.";
+      if (e instanceof ZodError) {
+        message = e.errors
+          .map((issue) => `${issue.path.join(".")} - ${issue.message}`)
+          .join("\n");
+      } else if (e instanceof APIError) {
+        message = e.message;
+      } else {
+        throw e;
+      }
+      return { success: false, error: message };
+    }
+  };
+};
+```
+
+Now we can use this wrapper to define server actions without repeating ourselves.
+
+### Example: Create Post Action
+
+```ts
+// actions.ts
+"use server";
+import { serverActionWrapper } from "./server-action-helper";
+import { z } from "zod";
+
+const createPostSchema = z.object({
+  title: z.string().min(1),
+  description: z.string().min(10),
+  content: z.string().min(100),
+});
+
+export const createPost = serverActionWrapper({
+  schema: createPostSchema,
+  async callback(input) {
+    // Your create post logic here
+    if (await db.findPost(input.title)) {
+      throw new APIError({ status: 400, message: "Post already exists" });
+    }
+    return await db.createPost(input);
+  },
+});
+```
+
+### Handling the Response on the Client
+
+```tsx
+import { createPost } from "./actions.ts";
+
+async function onSubmit(data) {
+  const result = await createPost(data);
+
+  if (result.success) {
+    console.log(result.data); // Post created successfully
+  } else {
+    console.error(result.error); // Post already exists
+  }
+}
+```
+
+### Unhandled Errors
+
+Unhandled errors will still result in a 500 (Server Error) with a stack trace in development. In production, only the status code will be shown without the stack trace.
+
+---
+
+Feel free to use this wrapper in your projects and customize it to suit your needs. Thanks for reading!

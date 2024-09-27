@@ -92,7 +92,7 @@ program
       .toLocaleLowerCase();
 
     let confirmation = await confirm({
-      message: `You are about to create a new post at \`/src/content/blog/${slug}/index.mdx\`\nAre you sure?`,
+      message: `You are about to create a new post at \`./src/content/blog/${slug}/index.mdx\`\nAre you sure?`,
       default: false,
     });
 
@@ -108,7 +108,7 @@ program
     );
 
     console.log(
-      `New post created \`/src/content/blog/${slug}/index.mdx\`\nYou can edit it to get started.`,
+      `New post created \`./src/content/blog/${slug}/index.mdx\`\nYou can edit it to get started.`,
     );
   });
 
