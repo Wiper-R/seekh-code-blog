@@ -4,14 +4,19 @@ import { defineConfig } from "astro/config";
 import tailwind from "@astrojs/tailwind";
 
 import react from "@astrojs/react";
-
+import partytown from "@astrojs/partytown";
 import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
 export default defineConfig({
   site: "http://seekhcode.me",
   // base: "/seekh-code-blog",
-  integrations: [tailwind(), react({ experimentalReactChildren: true }), mdx()],
+  integrations: [
+    tailwind(),
+    react({ experimentalReactChildren: true }),
+    mdx(),
+    partytown({ config: { forward: ["dataLayer.push"] } }),
+  ],
   markdown: {
     shikiConfig: { theme: "slack-dark" },
   },
