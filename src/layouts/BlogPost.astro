@@ -8,6 +8,7 @@ import MainLayout from "./MainLayout.astro";
 import { getReadingTime } from "@/lib/utils";
 import { Image } from "astro:assets";
 import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
+import PostComments from "@/components/PostComments.astro";
 
 const { title, description, pubDate, updatedDate, heroImage, authorId } =
   Astro.props.data;
@@ -192,5 +193,6 @@ const author = authors[authorId];
     <article class="blog">
       <slot />
     </article>
+  <PostComments/>
   </div>
 </MainLayout>
