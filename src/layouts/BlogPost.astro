@@ -40,6 +40,10 @@ const author = authors[authorId];
       p {
         @apply text-lg mb-4;
       }
+      :not(.astro-code) code {
+        @apply border border-border/40 rounded-sm px-1 py-0.5 text-base bg-gray-950
+      }
+
 
       .astro-code {
         @apply p-5 rounded-lg border border-border/40 text-base mb-10;

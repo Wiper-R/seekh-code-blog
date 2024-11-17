@@ -1,0 +1,67 @@
+---
+title: "Compile Aseprite in Windows"
+description: "Aseprite is a open source pixel art creating/editing tool. You can compile it from source and use it for free."
+pubDate: "2024-11-17T07:17:01.484Z"
+heroImage: "./compile-aseprite-in-windows.jpg"
+authorId: wiperr
+---
+
+## Getting the source code
+
+
+##### Method 1: From releases (recommended)
+You can download the source zip from [release page](https://github.com/aseprite/aseprite/releases)
+![Alt text for the image](./download-source-from-release.png)
+
+##### Method 2: Clone from github
+```bash
+git clone --recursive https://github.com/aseprite/aseprite.git
+```
+
+
+## Dependencies
+1. [Cmake (3.16 or higher)](https://cmake.org/)
+2. [Ninja Build System](https://ninja-build.org/)
+3. [Skia Prebuilt binaries](https://github.com/aseprite/skia/releases/download/m102-861e4743af/Skia-Windows-Release-x64.zip)
+
+### Installing/Setting-Up Dependencies
+* Make a folder called `bin` in `C:` drive. It should look like `c:/bin` and paste ninja binary in it.
+* Add this bin folder in PATH environment variable.
+![Environment Variable](./environment-path-variable.png)
+* Make another folder called `c:/deps/skia` and extract skia prebuilt binaries in it.
+
+```bash
+# File tree should look like this
+c:
+└── deps
+      └── skia
+          ├── include
+          ├── modules
+          ├── out
+          ├── src
+          └── third_party
+```
+
+
+## Windows Dependencies
+1. Windows 10 or higher
+2. [Visual Studio Community](https://visualstudio.microsoft.com/downloads/)
+3. The Desktop development with C++ item + Windows 10/11 SDK from the Visual Studio installer
+![Example Image](./visual-studio.png)
+
+
+# Building
+Extract aseprite code in `c:/aseprite`
+<br/>Open command prompt and run following commands.
+```cmd
+call "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\VsDevCmd.bat" -arch=x64
+cd aseprite
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLAF_BACKEND=skia -DSKIA_DIR=C:\deps\skia -DSKIA_LIBRARY_DIR=C:\deps\skia\out\Release-x64 -DSKIA_LIBRARY=C:\deps\skia\out\Release-x64\skia.lib -G Ninja ..
+ninja aseprite
+```
+
+
+## Video Tutorial
+<iframe width="560" height="315" src="https://www.youtube.com/embed/31B-zBRkh5I?si=GVAv97kLBflUz-Cp" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="mx-auto"></iframe>
