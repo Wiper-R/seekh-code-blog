@@ -6,6 +6,7 @@ import tailwind from "@astrojs/tailwind";
 import react from "@astrojs/react";
 import partytown from "@astrojs/partytown";
 import mdx from "@astrojs/mdx";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 // https://astro.build/config
 export default defineConfig({
@@ -20,4 +21,8 @@ export default defineConfig({
   markdown: {
     shikiConfig: { theme: "slack-dark" },
   },
+  vite: {
+    plugins: [nodePolyfills()]
+  }
+
 });

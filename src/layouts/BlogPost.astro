@@ -78,7 +78,7 @@ const author = authors[authorId];
       }
 
       .code-copy-button:hover {
-        background-color: #005f99;
+        @apply bg-stone-950;
       }
 
       a {
@@ -197,7 +197,7 @@ const author = authors[authorId];
     <article class="blog">
       <slot />
     </article>
-    <CodeCopyButton client:load client:only />
+    <CodeCopyButton client:load />
     <PostComments />
   </div>
 </MainLayout>

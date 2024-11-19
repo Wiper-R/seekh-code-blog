@@ -1,5 +1,5 @@
 ---
-import Navbar from "@/components/Navbar/Navbar.astro";
+import Navbar from "@/components/Navbar/Navbar";
 import { MaxWidthWrapper } from "../layouts/MaxWidthWrapper";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { cn } from "@/lib/utils";
@@ -20,7 +20,7 @@ import Footer from "@/components/Footer.astro";
     />
   </Fragment>
   <div class="min-h-screen flex flex-col">
-    <Navbar />
+    <Navbar client:load />
     <MaxWidthWrapper
       className="relative flex items-center justify-center flex-col h-full flex-grow w-full py-10"
     >
@@ -42,7 +42,7 @@ import Footer from "@/components/Footer.astro";
           <a
             class={cn(
               buttonVariants({ size: "lg" }),
-              "flex items-center space-x-2 transition-transform transform hover:scale-105"
+              "flex items-center space-x-2 transition-transform transform hover:scale-105",
             )}
             href="/blog"
           >
@@ -52,7 +52,7 @@ import Footer from "@/components/Footer.astro";
             href="https://youtube.com/@seekhcode"
             class={cn(
               buttonVariants({ size: "lg", variant: "secondary" }),
-              "flex items-center space-x-2 transition-transform transform hover:scale-105"
+              "flex items-center space-x-2 transition-transform transform hover:scale-105",
             )}
           >
             <span>Start Watching</span>
