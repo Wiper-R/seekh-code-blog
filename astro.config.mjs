@@ -22,7 +22,9 @@ export default defineConfig({
     shikiConfig: { theme: "slack-dark" },
   },
   vite: {
-    plugins: [nodePolyfills()]
+    plugins: [
+      nodePolyfills()
+    ]
   }
 
 });
