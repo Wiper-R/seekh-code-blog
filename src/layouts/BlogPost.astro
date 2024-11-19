@@ -9,6 +9,7 @@ import { getReadingTime } from "@/lib/utils";
 import { Image } from "astro:assets";
 import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
 import PostComments from "@/components/PostComments.astro";
+import { CodeCopyButton } from "@/components/code-copy-button";
 
 const { title, description, pubDate, updatedDate, heroImage, authorId } =
   Astro.props.data;
@@ -41,12 +42,11 @@ const author = authors[authorId];
       p {
         @apply text-lg mb-4;
       }
-      :not(.astro-code) code {
-        @apply border border-border/40 rounded-sm px-1 py-0.5 text-base bg-gray-950
+      :not(pre.astro-code) > code {
+        @apply border border-border/40 rounded-sm px-1 py-0.5 bg-gray-950 font-[inherit];
       }
 
-
-      .astro-code {
+      pre.astro-code {
         @apply p-5 rounded-lg border border-border/40 text-base mb-10;
       }
 
@@ -73,8 +73,12 @@ const author = authors[authorId];
         @apply italic border-l-4 border-gray-600 pl-4 text-gray-400;
       }
 
-      pre {
-        @apply bg-zinc-900 p-4 rounded-lg text-sm overflow-x-auto;
+      .code-copy-button {
+        @apply absolute top-2 right-2 px-2 py-1 cursor-pointer bg-stone-800 text-white border border-border rounded transition-colors text-sm;
+      }
+
+      .code-copy-button:hover {
+        background-color: #005f99;
       }
 
       a {
@@ -193,6 +197,7 @@ const author = authors[authorId];
     <article class="blog">
       <slot />
     </article>
-  <PostComments/>
+    <CodeCopyButton client:load client:only />
+    <PostComments />
   </div>
 </MainLayout>
