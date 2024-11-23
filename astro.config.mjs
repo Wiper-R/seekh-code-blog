@@ -22,12 +22,13 @@ export default defineConfig({
     sitemap()
   ],
   markdown: {
-    shikiConfig: { theme: "slack-dark" },
+    
+    shikiConfig: { theme: "slack-dark",  langs: []},
   },
   vite: {
     plugins: [
-      nodePolyfills()
-    ]
+      // nodePolyfills()
+    ],
   }
 
 });

@@ -46,5 +46,5 @@ export function CodeCopyButton() {
     };
   }, []);
 
-  return null;
+  return <></>;
 }
