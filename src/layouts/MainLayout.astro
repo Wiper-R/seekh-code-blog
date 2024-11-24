@@ -6,7 +6,7 @@ import BaseLayout from "./BaseLayout.astro";
 
 <BaseLayout>
   <slot name="head" slot="head" />
-  <Navbar client:load />
+  <Navbar client:idle />
   <slot />
   <Footer />
 </BaseLayout>

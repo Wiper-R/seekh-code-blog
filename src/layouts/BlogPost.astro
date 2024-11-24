@@ -7,7 +7,6 @@ import { authors } from "@/data/authors";
 import MainLayout from "./MainLayout.astro";
 import { getReadingTime } from "@/lib/utils";
 import { Image } from "astro:assets";
-import GoogleAnalytics from "@/components/GoogleAnalytics.astro";
 import PostComments from "@/components/PostComments.astro";
 import { CodeCopyButton } from "@/components/code-copy-button";
 
@@ -25,9 +24,7 @@ const author = authors[authorId];
     description={description}
     image={heroImage?.src}
     slot="head"
-  >
-    <GoogleAnalytics />
-  </BaseHead>
+  />
 
   <style>
     article.blog {
