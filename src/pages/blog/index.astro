@@ -4,6 +4,7 @@ import MainLayout from "@/layouts/MainLayout.astro";
 import { MaxWidthWrapper } from "@/layouts/MaxWidthWrapper";
 import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
+import BaseHead from "@/components/BaseHead.astro";
 
 const posts = (await getCollection("blog")).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -11,6 +12,11 @@ const posts = (await getCollection("blog")).sort(
 ---
 
 <MainLayout>
+  <BaseHead
+    slot="head"
+    title="Seekhcode - Blog"
+    description="Read variety of blogs"
+  />
   <MaxWidthWrapper className="my-10">
     <div class="max-w-screen-md space-y-10">
       {
