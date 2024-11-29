@@ -1,7 +1,8 @@
-<script
+<!-- <script
   type="text/partytown"
   async
-  src="https://www.googletagmanager.com/gtag/js?id=G-TVZWC4ERZ6"></script>
+  src="https://www.googletagmanager.com/gtag/js?id=G-TVZWC4ERZ6"
+  is:inline></script>
 <script type="text/partytown">
   // @ts-ignore
   window.dataLayer = window.dataLayer || [];
@@ -13,5 +14,16 @@
   gtag("js", new Date());
 
   // @ts-ignore
+  gtag("config", "G-TVZWC4ERZ6");
+</script> --><!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TVZWC4ERZ6"
+></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("js", new Date());
+
   gtag("config", "G-TVZWC4ERZ6");
 </script>
