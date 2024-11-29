@@ -1,7 +1,10 @@
 import { Command } from "commander";
 import { input, search, confirm } from "@inquirer/prompts";
-import { authors } from "@/data/authors";
 import fs from "node:fs/promises";
+
+type Author = {
+  displayName: string;
+};
 
 const BASE_PATH = "src/content/blog/";
 
@@ -19,6 +22,12 @@ const slugExists = async (slug: string) => {
   }
 };
 
+async function getAuthors() {
+  const res = await fetch("http://localhost:4321/authors.json");
+  return await res.json();
+}
+const authors: Record<string, Author> = await getAuthors();
+
 const getBlogTemplate = (slug: string, authorId: string) => {
   const date = new Date().toISOString();
   return `---
@@ -26,7 +35,7 @@ title: "Untitled"
 description: "Describe your post here"
 pubDate: "${date}"
 # heroImage: "./${slug}.jpg"
-authorId: ${authorId}
+author: ${authorId}
 ---
 
 Your content goes here`;
@@ -50,7 +59,7 @@ program
         const foundAuthors = Object.keys(authors).filter((authorId) => {
           if (!input) return true;
           if (
-            authors[authorId].name
+            authors[authorId].displayName
               .toLowerCase()
               .includes(input.toLowerCase()) ||
             authorId.toLowerCase().includes(input.toLowerCase())
@@ -60,7 +69,7 @@ program
           return false;
         });
         return foundAuthors.map((authorId) => ({
-          name: authors[authorId].name,
+          name: authors[authorId].displayName,
           value: authorId,
         }));
       },

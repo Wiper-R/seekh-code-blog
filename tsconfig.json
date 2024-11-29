@@ -4,6 +4,10 @@
     "baseUrl": ".",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "strictNullChecks": true,
     "paths": {
       "@/*": ["src/*"]
     }
