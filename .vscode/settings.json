@@ -8,6 +8,10 @@
     {
       "fileMatch": ["/src/content/authors/**"],
       "url": ".astro/collections/authors.schema.json"
+    },
+    {
+      "fileMatch": ["/src/content/tags/**"],
+      "url": ".astro/collections/tags.schema.json"
     }
   ]
 }

@@ -10,7 +10,7 @@ const blog = defineCollection({
       updatedDate: z.coerce.date().optional(),
       heroImage: image().optional(),
       author: reference("authors"),
-      tags: z.array(z.string()).default(() => []),
+      tags: z.array(reference("tags")).default([]),
     }),
 });
 
@@ -24,4 +24,13 @@ const authors = defineCollection({
     }),
 });
 
-export const collections = { blog, authors };
+const tags = defineCollection({
+  type: "data",
+  schema: z.object({
+    name: z.string(),
+    description: z.string().optional(),
+    color: z.string(),
+  }),
+});
+
+export const collections = { blog, authors, tags };
