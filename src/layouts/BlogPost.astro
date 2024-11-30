@@ -36,10 +36,12 @@ const author = await getEntry(authorRef);
       snippet={{
         "@context": "http://schema.org",
         "@type": "Article",
-        name: title,
+        headline: title,
+        decription: description,
         author: {
           "@type": "Person",
           name: author.data.displayName,
+          url: author.data.website,
         },
         datePublished: pubDate,
         image: heroImage && heroImage.src,
