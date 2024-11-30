@@ -3,10 +3,11 @@ type Props = {
   title: string;
   description: string;
   image?: string;
+  canonicalPath?: string;
 };
 
-const { title, description, image } = Astro.props;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const { title, description, image, canonicalPath } = Astro.props;
+const canonicalURL = new URL(canonicalPath || Astro.url.pathname, Astro.site);
 ---
 
 <meta charset="utf-8" />
