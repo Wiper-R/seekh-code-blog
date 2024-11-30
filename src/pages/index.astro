@@ -15,27 +15,7 @@ import BaseHead from "@/components/BaseHead.astro";
     title="SeekhCode"
     description="Learn to code, explore tutorials, and stay updated with the latest tech guides. Empowering developers with easy-to-follow programming insights."
     slot="head"
-  >
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "WebSite",
-        "url": "https://www.seekhcode.me",
-        "name": "SeekhCode",
-        "description": "Learn to code, explore tutorials, and stay updated with the latest tech guides. Empowering developers with easy-to-follow programming insights.",
-        "publisher": {
-          "@type": "Organization",
-          "name": "SeekhCode",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://www.seekhcode.me/logo.png",
-            "width": 512,
-            "height": 512
-          }
-        }
-      }
-    </script>
-  </BaseHead>
+  />
   <div class="min-h-screen flex flex-col">
     <Navbar client:load />
     <MaxWidthWrapper

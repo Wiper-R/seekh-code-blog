@@ -1,0 +1,9 @@
+---
+type Props = {
+  snippet: Record<string, any>;
+};
+
+const { snippet } = Astro.props;
+---
+
+<script set:html={JSON.stringify(snippet)} type="application/ld+json" />
