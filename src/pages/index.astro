@@ -7,18 +7,34 @@ import { buttonVariants } from "@/components/button";
 import { PopularPosts } from "@/components/Hero/PopularPosts";
 import { Testimonials } from "@/components/Hero/Testimonials";
 import Footer from "@/components/Footer.astro";
+import BaseHead from "@/components/BaseHead.astro";
 ---
 
 <BaseLayout>
-  <Fragment slot="head">
-    <title>SeekhCode</title>
-    <meta
-      name="description"
-      content="Welcome to Seekh Code – your gateway to free, high-quality coding
-          tutorials and insights. Dive into our resources and elevate your
-          skills effortlessly."
-    />
-  </Fragment>
+  <BaseHead
+    title="SeekhCode"
+    description="Learn to code, explore tutorials, and stay updated with the latest tech guides. Empowering developers with easy-to-follow programming insights."
+  >
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "url": "https://www.seekhcode.me",
+        "name": "SeekhCode",
+        "description": "Learn to code, explore tutorials, and stay updated with the latest tech guides. Empowering developers with easy-to-follow programming insights.",
+        "publisher": {
+          "@type": "Organization",
+          "name": "SeekhCode",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.seekhcode.me/logo.png",
+            "width": 512,
+            "height": 512
+          }
+        }
+      }
+    </script>
+  </BaseHead>
   <div class="min-h-screen flex flex-col">
     <Navbar client:load />
     <MaxWidthWrapper
