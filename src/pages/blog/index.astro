@@ -24,40 +24,39 @@ const posts = (await getCollection("blog")).sort(
           const author = await getEntry(data.author);
           return (
             <>
-              <div
+              <article
                 class="flex justify-between relative gap-4"
                 role="link"
                 data-href=""
               >
-                <a
-                  href={`/blog/${slug}`}
-                  class="absolute inset-0"
-                  rel="noopener follow"
-                />
                 <div class="flex flex-col">
-                  <div class="pointer-events-none z-10">
-                    <div class="flex items-center gap-2 pointer-events-auto">
-                      {author.data.avatar && (
-                        <Image
-                          src={author.data.avatar}
-                          alt="Author Avatar"
-                          class="rounded-full w-8 h-8"
-                        />
-                      )}
-                      <a
-                        href={author.data.website}
-                        class="flex gap-2 text-gray-200 items-center hover:underline"
-                      >
-                        {author.data.displayName}
-                      </a>
-                    </div>
+                  <div class="flex items-center gap-2">
+                    {author.data.avatar && (
+                      <Image
+                        src={author.data.avatar}
+                        alt="Author Avatar"
+                        class="rounded-full w-8 h-8"
+                      />
+                    )}
+                    <a
+                      href={author.data.website}
+                      class="flex gap-2 text-gray-200 items-center hover:underline z-10"
+                    >
+                      {author.data.displayName}
+                    </a>
                   </div>
-                  <h4 class="text-3xl text-white font-semibold mt-2">
-                    {data.title}
-                  </h4>
-                  <p class="line-clamp-3 text-gray-300 mt-4">
-                    {data.description}
-                  </p>
+                  <a
+                    href={`/blog/${slug}`}
+                    rel="noopener follow"
+                    class="before:absolute before:inset-0 before:z-[1]"
+                  >
+                    <h4 class="text-3xl text-white font-semibold mt-2">
+                      {data.title}
+                    </h4>
+                    <p class="line-clamp-3 text-gray-300 mt-4">
+                      {data.description}
+                    </p>
+                  </a>
                   {/* Tags */}
                   <div class="mt-4 flex flex-wrap gap-2">
                     {tags &&
@@ -81,7 +80,7 @@ const posts = (await getCollection("blog")).sort(
                     class="w-32 h-32 object-cover"
                   />
                 )}
-              </div>
+              </article>
               <hr class="border-border/20 border" />
             </>
           );
