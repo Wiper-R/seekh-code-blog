@@ -17,7 +17,7 @@ export default defineConfig({
     react({ experimentalReactChildren: true }),
     mdx(),
     partytown({ config: { forward: ["dataLayer.push"] } }),
-    sitemap()
+    sitemap({filter: (page) => !page.startsWith("https://seekhcode.me/blog/tags")})
   ],
   markdown: {
     shikiConfig: { theme: "slack-dark",  langs: []},
