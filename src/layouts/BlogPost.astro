@@ -226,12 +226,14 @@ const author = await getEntry(authorRef);
         tags.map(async (tagRef) => {
           const tag = await getEntry(tagRef);
           return (
-            <span
+            <a
               class={`py-1 px-2 rounded-full bg-gray-600 text-sm`}
               style={`background-color: ${tag.data.color}`}
+              href={`/blog/tags/${tag.id}`}
+              rel="nofollow"
             >
               {tag.data.name}
-            </span>
+            </a>
           );
         })
       }

@@ -1,0 +1,70 @@
+---
+import { Image } from "astro:assets";
+import type { ContentEntryMap } from "astro:content";
+import { getEntry } from "astro:content";
+
+type Props = {
+  post: ContentEntryMap["blog"][keyof ContentEntryMap["blog"]];
+};
+
+const { post } = Astro.props;
+
+const { slug } = post;
+const { title, description, tags, heroImage } = post.data;
+const author = await getEntry(post.data.author);
+---
+
+<article class="flex justify-between relative gap-4" role="link" data-href="">
+  <div class="flex flex-col">
+    <div class="flex items-center gap-2">
+      {
+        author.data.avatar && (
+          <Image
+            src={author.data.avatar}
+            alt="Author Avatar"
+            class="rounded-full w-8 h-8"
+          />
+        )
+      }
+      <a
+        href={author.data.website}
+        class="flex gap-2 text-gray-200 items-center hover:underline z-10"
+      >
+        {author.data.displayName}
+      </a>
+    </div>
+    <a
+      href={`/blog/${slug}`}
+      rel="noopener follow"
+      class="before:absolute before:inset-0 before:z-[1]"
+    >
+      <h4 class="text-3xl text-white font-semibold mt-2">
+        {title}
+      </h4>
+      <p class="line-clamp-3 text-gray-300 mt-4">
+        {description}
+      </p>
+    </a>
+    {/* Tags */}
+    <div class="mt-4 flex flex-wrap gap-2">
+      {
+        tags &&
+          tags.map(async (tagRef) => {
+            const tag = await getEntry(tagRef);
+            return (
+              <a
+                class="py-1 px-2 rounded-full text-xs text-white z-10 hover:brightness-90"
+                style={{ backgroundColor: tag.data.color }}
+                href={`/blog/tags/${tag.id}`}
+                rel="nofollow"
+              >
+                {tag.data.name}
+              </a>
+            );
+          })
+      }
+    </div>
+  </div>
+  {heroImage && <Image src={heroImage} alt="" class="w-32 h-32 object-cover" />}
+</article>
+<hr class="border-border/20 border" />

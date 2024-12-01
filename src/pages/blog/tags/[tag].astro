@@ -1,0 +1,41 @@
+---
+import BaseHead from "@/components/BaseHead.astro";
+import BlogEntry from "@/components/BlogEntry.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+import MaxWidthWrapper from "@/layouts/MaxWidthWrapper.astro";
+import { getEntry } from "astro:content";
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const tags = await getCollection("tags");
+  return tags.map((tag) => {
+    return {
+      params: { tag: tag.id },
+    };
+  });
+}
+const { tag } = Astro.params;
+const _tag = await getEntry("tags", tag);
+const posts = await getCollection("blog", (blog) =>
+  blog.data.tags.some((t) => t.id == tag),
+);
+---
+
+<MainLayout>
+  <BaseHead
+    slot="head"
+    title={_tag.data.name}
+    description={_tag.data.description || ""}
+  />
+  <MaxWidthWrapper class="my-10">
+    <div class="text-3xl font-bold text-white italic">
+      Displaying all posts tagged with: <span
+        style={`color: ${_tag.data.color}`}>{_tag.data.name}</span
+      >
+    </div>
+    <hr class="my-8 border-b border-border/40" />
+    <div class="space-y-10 mt-10 max-w-screen-md">
+      {posts.map((post) => <BlogEntry post={post} />)}
+    </div>
+  </MaxWidthWrapper>
+</MainLayout>
