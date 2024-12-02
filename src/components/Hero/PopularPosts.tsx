@@ -34,7 +34,7 @@ export function PopularPosts() {
       <div className="overflow-hidden absolute top-0 left-0 w-full select-none pointer-events-none">
         <img
           src={Spotlight1.src}
-          className="w-[400%] md:w-[200%] max-w-none relative -translate-x-1/2 left-1/2"
+          className="w-[400%] md:w-[200%] max-w-[1600px] relative -translate-x-1/2 left-1/2"
         />
       </div>
       <MaxWidthWrapper className="py-10 my-20">

@@ -26,7 +26,7 @@ export function Testimonials() {
       <div className="overflow-hidden absolute top-0 left-0 w-full select-none pointer-events-none">
         <img
           src={Spotlight2.src}
-          className="w-[200%] md:w-[100%] max-w-none relative -translate-x-1/2 left-1/2"
+          className="w-[200%] md:w-[400%] max-w-[1600px] relative -translate-x-1/2 left-1/2"
         />
       </div>
 
