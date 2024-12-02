@@ -44,7 +44,7 @@ const Navbar = () => {
         <div className="flex md:hidden flex-col">
           <div className="flex justify-between items-center">
             <a href="/" className="">
-              <img src={Logo.src} className="w-14" alt="Seekh Code Logo" />
+              <img src={Logo.src} className="w-10" alt="Seekh Code Logo" />
             </a>
             <button
               className="block md:hidden p-2 text-black dark:text-white focus:outline-none"

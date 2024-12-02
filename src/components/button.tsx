@@ -10,7 +10,9 @@ const buttonVariants = cva([], {
     },
     size: {
       default: "",
-      lg: ["rounded text-xl px-8 py-4 font-semibold"],
+      lg: [
+        "rounded text-base md:text-xl px-4 md:px-8 py-2 md:py-4 font-semibold",
+      ],
     },
   },
   defaultVariants: {

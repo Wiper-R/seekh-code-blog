@@ -9,10 +9,12 @@ type TestimonalCardProps = {
 };
 function TestimonialCard({ author, content, role }: TestimonalCardProps) {
   return (
-    <div className="flex flex-col bg-gradient-to-b h-[160px] from-start to-end p-4 rounded-lg text-white border-none relative isolate border border-border/20">
-      <h3 className="text-xl font-semibold">@{author}</h3>
-      <p className="mt-3 text-gray-300">{content}</p>
-      <div className="text-right text-gray-200 mt-auto">- {role}</div>
+    <div className="flex flex-col bg-gradient-to-b h-[140px] md:h-[160px] from-start to-end p-4 md:p-6 rounded-lg text-white border-none relative isolate border border-border/20">
+      <h3 className="text-base md:text-xl font-semibold">@{author}</h3>
+      <p className="text-sm md:text-base mt-3 text-gray-500">{content}</p>
+      <div className="text-xs md:text-base text-right text-gray-400 mt-auto">
+        - {role}
+      </div>
     </div>
   );
 }
@@ -21,10 +23,12 @@ export function Testimonials() {
   return (
     <div className="relative">
       <hr className="border-border/40" />
-      <img
-        src={Spotlight2.src}
-        className="w-full mx-auto max-w-[1800px] absolute left-1/2 -translate-x-1/2 select-none pointer-events-none"
-      />
+      <div className="overflow-hidden absolute top-0 left-0 w-full select-none pointer-events-none">
+        <img
+          src={Spotlight2.src}
+          className="w-[200%] md:w-[100%] max-w-none relative -translate-x-1/2 left-1/2"
+        />
+      </div>
 
       <MaxWidthWrapper className="py-10 my-20">
         <SectionHeading heading="Testimonials" />

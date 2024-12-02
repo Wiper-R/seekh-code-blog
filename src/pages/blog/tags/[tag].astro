@@ -28,13 +28,13 @@ const posts = await getCollection("blog", (blog) =>
     description={_tag.data.description || ""}
   />
   <MaxWidthWrapper class="my-10">
-    <div class="text-3xl font-bold text-white italic">
+    <div class="text-lg md:text-3xl font-bold text-white italic">
       Displaying all posts tagged with: <span
         style={`color: ${_tag.data.color}`}>{_tag.data.name}</span
       >
     </div>
-    <hr class="my-8 border-b border-border/40" />
-    <div class="space-y-10 mt-10 max-w-screen-md">
+    <hr class="my-4 md:my-8 border-b border-border/40" />
+    <div class="space-y-6 md:space-y-10 mt-6 md:mt-10 max-w-screen-md">
       {posts.map((post) => <BlogEntry post={post} />)}
     </div>
   </MaxWidthWrapper>

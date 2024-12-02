@@ -13,13 +13,15 @@ function PopularPostCard({ title, description, imageUrl }: PostCardProps) {
     <div className="border border-border/20 rounded-xl">
       <a
         href=""
-        className="bg-gradient-to-b from-start to-end h-full group max-w-[400px] p-6 rounded-xl text-black dark:text-white flex flex-col gap-4"
+        className="bg-gradient-to-b from-start to-end h-full group max-w-[400px] p-4 md:p-6 rounded-xl text-black dark:text-white flex flex-col gap-2 md:gap-4"
       >
         <div className="space-y-5">
           <img src={imageUrl} className="rounded" />
-          <h3 className="text-2xl font-semibold">{title}</h3>
+          <h3 className="text-lg md:text-2xl font-semibold">{title}</h3>
         </div>
-        <div className="text-lg mt-auto">{description}</div>
+        <div className="text-sm md:text-lg mt-auto text-gray-500">
+          {description}
+        </div>
       </a>
     </div>
   );
@@ -29,10 +31,12 @@ export function PopularPosts() {
   return (
     <div className="relative">
       <hr className="border-border/40" />
-      <img
-        src={Spotlight1.src}
-        className="w-full mx-auto max-w-[1600px] absolute left-1/2 -translate-x-1/2 select-none pointer-events-none"
-      />
+      <div className="overflow-hidden absolute top-0 left-0 w-full select-none pointer-events-none">
+        <img
+          src={Spotlight1.src}
+          className="w-[400%] md:w-[200%] max-w-none relative -translate-x-1/2 left-1/2"
+        />
+      </div>
       <MaxWidthWrapper className="py-10 my-20">
         <SectionHeading heading="Popular Posts" />
         <div className="gap-10 mt-16 grid grid-cols-1 max-w-sm mx-auto md:max-w-screen-md md:grid-cols-2 lg:max-w-screen-xl lg:grid-cols-3">

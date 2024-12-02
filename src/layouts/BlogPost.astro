@@ -50,7 +50,7 @@ const author = await getEntry(authorRef);
   </BaseHead>
 
   <style>
-    article.blog {
+    /* article.blog {
       @apply text-white;
 
       @apply text-lg;
@@ -60,7 +60,7 @@ const author = await getEntry(authorRef);
       }
 
       p {
-        @apply text-lg mb-4;
+        @apply text-base md:text-lg mb-4;
       }
       :not(pre.astro-code) > code {
         @apply border border-border/40 rounded-sm px-1 py-0.5 bg-gray-950 font-[inherit];
@@ -72,8 +72,7 @@ const author = await getEntry(authorRef);
 
       ul,
       ol {
-        @apply ml-4 pl-4 list-outside; /* Adjust spacing for better alignment */
-      }
+        @apply ml-4 pl-4 list-outside;      }
 
       ul {
         list-style-type: disc;
@@ -83,10 +82,9 @@ const author = await getEntry(authorRef);
         list-style-type: decimal;
       }
 
-      /* Add space between list items */
       ul li,
       ol li {
-        @apply mb-2; /* Add margin to separate items */
+        @apply mb-2 text-sm md:text-base; 
       }
 
       blockquote {
@@ -191,6 +189,148 @@ const author = await getEntry(authorRef);
       tr:last-of-type td:last-of-type {
         @apply rounded-br-lg;
       }
+    } */
+    article.blog {
+      @apply text-white;
+
+      @apply text-base sm:text-lg;
+
+      > * {
+        @apply my-2;
+      }
+
+      p {
+        @apply text-sm sm:text-base md:text-lg mb-4;
+      }
+
+      :not(pre.astro-code) > code {
+        @apply border border-border/40 rounded-sm px-1 py-0.5 bg-gray-950 font-[inherit];
+      }
+
+      pre.astro-code {
+        @apply p-4 sm:p-5 rounded-lg border border-border/40 text-sm sm:text-base mb-8 sm:mb-10;
+      }
+
+      ul,
+      ol {
+        @apply ml-3 sm:ml-4 pl-4 list-outside;
+      }
+
+      ul {
+        list-style-type: disc;
+      }
+
+      ol {
+        list-style-type: decimal;
+      }
+
+      ul li,
+      ol li {
+        @apply mb-1 sm:mb-2 text-sm sm:text-base;
+      }
+
+      blockquote {
+        @apply italic border-l-2 sm:border-l-4 border-gray-600 pl-3 sm:pl-4 text-gray-400;
+      }
+
+      .code-copy-button {
+        @apply absolute top-2 right-2 px-2 py-1 cursor-pointer bg-stone-800 text-white border border-border rounded transition-colors text-xs sm:text-sm;
+      }
+
+      .code-copy-button:hover {
+        @apply bg-stone-950;
+      }
+
+      a {
+        @apply text-blue-400 hover:underline;
+      }
+
+      hr {
+        @apply my-6 sm:my-8 border-t border-border/40;
+      }
+
+      img {
+        @apply rounded-lg max-w-full h-auto mx-auto my-6 sm:my-10;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        @apply font-bold;
+      }
+
+      h1 {
+        @apply text-3xl sm:text-4xl;
+      }
+
+      h2 {
+        @apply text-2xl sm:text-3xl my-4 sm:my-6;
+      }
+
+      h3 {
+        @apply text-xl sm:text-2xl;
+      }
+
+      h4 {
+        @apply text-lg sm:text-xl;
+      }
+
+      h5 {
+        @apply text-base sm:text-lg;
+      }
+
+      h6 {
+        @apply text-sm sm:text-base;
+      }
+
+      figure {
+        figcaption {
+          @apply text-xs sm:text-sm text-gray-400 italic text-center;
+        }
+      }
+
+      tbody tr {
+        &:hover {
+          td {
+            @apply bg-zinc-800;
+          }
+        }
+        &:not(:last-of-type) {
+          @apply border-border/40 border-b;
+        }
+      }
+
+      th,
+      td {
+        @apply px-3 sm:px-4 py-2 bg-start min-w-[100px] sm:min-w-[140px] text-left;
+      }
+
+      th {
+        @apply font-semibold border-b border-border/40 text-gray-400;
+      }
+
+      td {
+        @apply text-gray-300;
+      }
+
+      th:first-of-type {
+        @apply rounded-tl-lg;
+      }
+
+      th:last-of-type {
+        @apply rounded-tr-lg;
+      }
+
+      tr:last-of-type td:first-of-type {
+        @apply rounded-bl-lg;
+      }
+
+      tr:last-of-type td:last-of-type {
+        @apply rounded-br-lg;
+      }
     }
   </style>
   <div class="max-w-screen-md mx-auto text-black dark:text-white py-10 px-4">
@@ -199,11 +339,11 @@ const author = await getEntry(authorRef);
         <Image src={heroImage} alt="" class="w-full object-contain my-10" />
       )
     }
-    <h1 class="text-5xl my-4 font-semibold">
+    <h1 class="text-2xl md:text-5xl my-4 font-bold">
       {title}
     </h1>
-    <p class="my-4 text-2xl">{description}</p>
-    <div class="flex gap-2 items-center">
+    <p class="my-2 md:my-4 text-base md:text-2xl">{description}</p>
+    <div class="flex gap-2 items-center my-6">
       {
         author.data.avatar && (
           <Image
@@ -214,33 +354,38 @@ const author = await getEntry(authorRef);
         )
       }
       <div class="flex flex-col justify-center">
-        <span>{author.data.displayName}</span>
+        <span class="text-sm md:text-base">{author.data.displayName}</span>
         <span class="space-x-4">
-          <span>Published {moment(pubDate).format("DD-MMM-YYYY")}</span>
-          <span>{getReadingTime(body)}</span>
+          <span class="text-sm"
+            >Published {moment(pubDate).format("DD-MMM-YYYY")}</span
+          >
+          <span class="text-sm">{getReadingTime(body)}</span>
         </span>
       </div>
     </div>
-    <div class="flex flex-wrap gap-2 mt-4">
-      {
-        tags.map(async (tagRef) => {
-          const tag = await getEntry(tagRef);
-          return (
-            <a
-              class={`py-1 px-2 rounded-full bg-gray-600 text-sm`}
-              style={`background-color: ${tag.data.color}`}
-              href={`/blog/tags/${tag.id}`}
-              rel="nofollow"
-            >
-              {tag.data.name}
-            </a>
-          );
-        })
-      }
+    <div class="space-y-4">
+      <hr class="border-border/20" />
+      <div class="flex flex-wrap gap-2">
+        {
+          tags.map(async (tagRef) => {
+            const tag = await getEntry(tagRef);
+            return (
+              <a
+                class={`py-1 px-2 rounded-full bg-gray-600 text-sm`}
+                style={`background-color: ${tag.data.color}`}
+                href={`/blog/tags/${tag.id}`}
+                rel="nofollow"
+              >
+                {tag.data.name}
+              </a>
+            );
+          })
+        }
+      </div>
+      <hr class="border-border/20" />
     </div>
-    <hr class="mt-10 mb-20" />
     <!-- TODO: Improve this, wrap whole blog post in article not just content -->
-    <article class="blog">
+    <article class="blog mt-10">
       <slot />
     </article>
     <CodeCopyButton client:idle />
