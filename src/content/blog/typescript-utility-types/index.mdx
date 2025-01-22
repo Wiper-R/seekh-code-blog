@@ -1,6 +1,6 @@
 ---
-title: "TypeScript Tips and Tricks"
-description: "Explore these TypeScript tips and tricks to ease your development journey and make your code more efficient."
+title: "TypeScript Utilty Types"
+description: "Explore these TypeScript Utilities to ease your development journey and make your code more efficient."
 pubDate: "2025-01-22T13:15:48.790Z"
 # heroImage: "./typescript-tips-and-tricks.jpg"
 author: wiperr
@@ -8,9 +8,9 @@ author: wiperr
 
 TypeScript has become a staple in web development, offering type safety and catching bugs during development. While it significantly enhances code reliability, it also introduces added complexity, which can make projects harder to manage.
 
-Fortunately, TypeScript comes with a wealth of built-in features—some of which are lesser-known yet incredibly useful. In this post, I’ll walk you through several of these features to make your TypeScript journey smoother and more efficient.
+Fortunately, TypeScript comes with a wealth of built-in features—some of which are lesser-known yet incredibly useful. In this post, I'll walk you through several of these features to make your TypeScript journey smoother and more efficient.
 
-Here’s what we’ll cover:
+Here's what we'll cover:
 - Using `ReturnType` to Infer Function Return Types
 - Resolving Promise Types with `Awaited`
 - Working with Union Types
@@ -24,7 +24,7 @@ Here’s what we’ll cover:
 
 ## 1. Using `ReturnType` to Infer Function Return Types
 
-The `ReturnType` utility type allows you to infer the return type of a function. Here’s an example:
+The `ReturnType` utility type allows you to infer the return type of a function. Here's an example:
 
 ```ts
 function getResult() {
@@ -74,7 +74,7 @@ This ensures that `ResultType` represents the resolved value, not the `Promise` 
 
 ## 3. Working with Union Types
 
-Union types allow you to define a type that could be one of several options. Here’s an example:
+Union types allow you to define a type that could be one of several options. Here's an example:
 
 ```ts
 type User = { id: number; name: string };
