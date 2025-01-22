@@ -20,25 +20,25 @@ type Student = {
 }
 var student: Student = {} // @ts-ignore
 ```
-In the above code, I deliberately added `@ts-ignore` to demonstrate what I meant. When we try to use student.name, it doesn’t give us an error either at compile time or runtime because TypeScript types aren’t validated at runtime.
+In the above code, I deliberately added `@ts-ignore` to demonstrate what I meant. When we try to use student.name, it doesn't give us an error either at compile time or runtime because TypeScript types aren't validated at runtime.
 
 To prevent this behavior, we employ Zod validation, which not only provides validation but also offers static types for our objects.
 
-### Why can’t we trust the request?
-Web requests can originate from any source, including potentially malicious ones. We can’t expect users to always input data in the correct format that we accept, so we have to use Zod as a middleware between requests and users.
+### Why can't we trust the request?
+Web requests can originate from any source, including potentially malicious ones. We can't expect users to always input data in the correct format that we accept, so we have to use Zod as a middleware between requests and users.
 
 ### How does Zod work?
 You start by defining a schema, which you then use to parse the incoming data. Zod handles errors itself, known as issues in Zod. You can create custom issues for specific conditions.
 
 Zod comes with many built-in data types and parsers such as `string`, `number`, `boolean`, `date`, `file`, `email`, etc. You can use the builder method to stack these up on each other, such as `.string().email()`
 
-By default, Zod doesn’t attempt to cast types to other types. For instance, if your schema expects a string and the data passed is a number, Zod will not typecast it for safety reasons. However, if you still want typecasting, you can use the .coerce builder method.
+By default, Zod doesn't attempt to cast types to other types. For instance, if your schema expects a string and the data passed is a number, Zod will not typecast it for safety reasons. However, if you still want typecasting, you can use the .coerce builder method.
 
 ### Can I use Zod for client side validation?
-Yes, zod can be used on both server and client side validation, react-hook-form provides a zod resolver which you can use to validate on client side, but that’s a topic for another day.
+Yes, zod can be used on both server and client side validation, react-hook-form provides a zod resolver which you can use to validate on client side, but that's a topic for another day.
 
 
-### Let’s dive into code
+### Let's dive into code
 #### Defining a schema
 ```ts
 import {z} from "zod";
@@ -149,7 +149,7 @@ Here is a pseudo code.
     6. continue with route implementation
     
 ### Implementation
-I am using app router the code shouldn’t change much for pages router as well.
+I am using app router the code shouldn't change much for pages router as well.
 
 Define the schema as we did earlier
 
