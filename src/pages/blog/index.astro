@@ -17,7 +17,7 @@ const posts = (await getCollection("blog")).sort(
     description="Read variety of blogs to unlock knowledge."
   />
   <MaxWidthWrapper class="my-10">
-    <div class="max-w-screen-md space-y-6 md:space-y-10">
+    <div class="max-w-screen-md space-y-6 md:space-y-10 mx-auto">
       {posts.map((post) => <BlogEntry post={post} />)}
     </div></MaxWidthWrapper
   >
