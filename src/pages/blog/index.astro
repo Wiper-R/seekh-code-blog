@@ -5,9 +5,9 @@ import { getCollection } from "astro:content";
 import BaseHead from "@/components/BaseHead.astro";
 import BlogEntry from "@/components/BlogEntry.astro";
 
-const posts = (await getCollection("blog")).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = (await getCollection("blog"))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .filter((post) => post.data.published);
 ---
 
 <MainLayout>

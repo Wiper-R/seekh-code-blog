@@ -10,7 +10,7 @@ type Props = {
 const { post } = Astro.props;
 
 const { slug } = post;
-const { title, description, tags, heroImage } = post.data;
+const { title, description, tags, heroImage, thumbnail } = post.data;
 const author = await getEntry(post.data.author);
 ---
 
@@ -70,9 +70,9 @@ const author = await getEntry(post.data.author);
     </div>
   </div>
   {
-    heroImage && (
+    (thumbnail || heroImage) && (
       <Image
-        src={heroImage}
+        src={(thumbnail || heroImage)!}
         alt=""
         class="w-20 h-20 md:w-32 md:h-32 object-cover"
       />
