@@ -33,7 +33,6 @@ After that notepad appear<br/>
 paste this line in the notepad and save it.
 ```bash
 oh-my-posh --init --shell pwsh --config ~/AppData/Local/Programs/oh-my-posh/themes/powerlevel10k_rainbow.omp.json | Invoke-Expression
-Set-Alias winfetch pwshfetch-test-1
 winfetch
 ```
 3. Restart your Terminal. Your Terminal should now load Oh My Posh automatically.
@@ -57,7 +56,7 @@ We’ll install winfetch, a tool that shows your computer’s info in the comman
 ![admin](./runAsAdmin.png)
 2. Run this Command.
 ```bash
-Install-Script -Name pwshfetch-test-1
+Install-Script winfetch
 ```
 Choose “Yes” for any prompts you encountered.
 3. Restart your Terminal to see `Winfetch` is installed correctly or not.
